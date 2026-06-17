@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Autoevaluación — Período 2 · 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --verde: #2E7D32;
+    --verde-claro: #43A047;
+    --verde-palido: #E8F5E9;
+    --verde-borde: #A5D6A7;
+    --texto: #1A1A1A;
+    --texto-suave: #555;
+    --fondo: #F7FAF7;
+    --blanco: #FFFFFF;
+    --error: #C62828;
+    --advertencia: #E65100;
+    --gris-linea: #DDE8DD;
+    --radio: 10px;
+    --sombra: 0 2px 12px rgba(46,125,50,0.08);
+  }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--fondo);
+    color: var(--texto);
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* ── ENCABEZADO ── */
+  header {
+    background: var(--verde);
+    color: white;
+    padding: 20px 24px 18px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  header img { height: 52px; width: auto; flex-shrink: 0; }
+  .header-texto h1 {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1.3;
+  }
+  .header-texto p {
+    font-size: 0.78rem;
+    font-weight: 300;
+    opacity: 0.85;
+    margin-top: 2px;
+  }
+
+  /* ── CONTENEDOR PRINCIPAL ── */
+  main {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  /* ── TARJETA ── */
+  .card {
+    background: var(--blanco);
+    border: 1px solid var(--gris-linea);
+    border-radius: var(--radio);
+    padding: 28px 24px;
+    margin-top: 20px;
+    box-shadow: var(--sombra);
+  }
+
+  /* ── SELECTOR DE CURSO / NOMBRE ── */
+  .step-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--verde);
+    margin-bottom: 8px;
+  }
+  .step-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 18px;
+    color: var(--texto);
+  }
+
+  select, textarea {
+    width: 100%;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.95rem;
+    border: 1.5px solid var(--verde-borde);
+    border-radius: 7px;
+    padding: 10px 14px;
+    color: var(--texto);
+    background: var(--blanco);
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%232E7D32' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--verde);
+    box-shadow: 0 0 0 3px rgba(46,125,50,0.12);
+  }
+  textarea {
+    background-image: none;
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.5;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--verde);
+    color: white;
+    border: none;
+    border-radius: 7px;
+    padding: 11px 22px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    margin-top: 16px;
+  }
+  .btn-primary:hover:not(:disabled) { background: var(--verde-claro); }
+  .btn-primary:active:not(:disabled) { transform: scale(0.98); }
+  .btn-primary:disabled {
+    background: #9E9E9E;
+    cursor: not-allowed;
+  }
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--verde);
+    border: 1.5px solid var(--verde-borde);
+    border-radius: 7px;
+    padding: 10px 20px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 12px;
+  }
+  .btn-secondary:hover:not(:disabled) {
+    background: var(--verde-palido);
+    border-color: var(--verde);
+  }
+  .btn-secondary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* ── CONTADOR REGRESIVO ── */
+  .timer-bar-wrap {
+    margin-top: 14px;
+    margin-bottom: 6px;
+  }
+  .timer-label {
+    font-size: 0.75rem;
+    color: var(--texto-suave);
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .timer-bar-bg {
+    height: 5px;
+    background: var(--gris-linea);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .timer-bar-fill {
+    height: 100%;
+    background: var(--verde);
+    border-radius: 99px;
+    transition: width 0.1s linear;
+  }
+  .timer-seconds {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--verde);
+    font-weight: 500;
+  }
+
+  /* ── PREGUNTA ── */
+  .pregunta-numero {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--verde);
+    margin-bottom: 6px;
+  }
+  .pregunta-texto {
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.55;
+    color: var(--texto);
+    margin-bottom: 4px;
+  }
+  .pregunta-sub {
+    font-size: 0.82rem;
+    color: var(--texto-suave);
+    margin-bottom: 14px;
+    line-height: 1.4;
+  }
+
+  /* ── OPCIONES DESPLEGABLE ── */
+  .opciones-wrap { margin-top: 4px; }
+
+  /* ── CHECKBOXES ── */
+  .checkbox-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .checkbox-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1.5px solid var(--gris-linea);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    user-select: none;
+  }
+  .checkbox-item:hover { border-color: var(--verde-borde); background: var(--verde-palido); }
+  .checkbox-item input[type="checkbox"] { margin-top: 2px; accent-color: var(--verde); flex-shrink: 0; }
+  .checkbox-item.checked { border-color: var(--verde); background: var(--verde-palido); }
+  .checkbox-label { font-size: 0.9rem; line-height: 1.4; }
+  .otro-input {
+    width: 100%;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.88rem;
+    border: 1px solid var(--verde-borde);
+    border-radius: 6px;
+    padding: 7px 10px;
+    margin-top: 6px;
+    display: none;
+  }
+  .otro-input:focus { outline: none; border-color: var(--verde); }
+  .otro-input.visible { display: block; }
+
+  /* ── DESLIZADOR DE NOTA ── */
+  .nota-wrap { margin-top: 8px; }
+  .nota-display {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 2.8rem;
+    font-weight: 500;
+    color: var(--verde);
+    text-align: center;
+    line-height: 1;
+    margin: 16px 0 8px;
+    transition: color 0.3s;
+  }
+  .nota-display.alta { color: var(--advertencia); }
+  .nota-display.maxima { color: var(--error); }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 99px;
+    background: var(--gris-linea);
+    outline: none;
+    cursor: pointer;
+    margin: 8px 0;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--verde);
+    border: 3px solid white;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .slider-etiquetas {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    color: var(--texto-suave);
+    font-family: 'IBM Plex Mono', monospace;
+    margin-top: 2px;
+  }
+
+  /* ── AVISO COSTO 5.0 ── */
+  .aviso-costo {
+    display: none;
+    background: #FFF3E0;
+    border: 1.5px solid #FFB74D;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-top: 14px;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: #4E2B00;
+  }
+  .aviso-costo.visible { display: block; }
+  .aviso-costo strong { color: var(--advertencia); }
+
+  /* ── PROGRESO ── */
+  .progreso-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0 0;
+    padding: 0 4px;
+  }
+  .progreso-bg {
+    flex: 1;
+    height: 4px;
+    background: var(--gris-linea);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progreso-fill {
+    height: 100%;
+    background: var(--verde);
+    border-radius: 99px;
+    transition: width 0.4s ease;
+  }
+  .progreso-texto {
+    font-size: 0.72rem;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--texto-suave);
+    white-space: nowrap;
+  }
+
+  /* ── INFO CURSO ── */
+  .info-curso {
+    font-size: 0.8rem;
+    color: var(--texto-suave);
+    background: var(--verde-palido);
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .info-curso span { display: flex; align-items: center; gap: 5px; }
+  .info-curso strong { color: var(--verde); }
+
+  /* ── SEPARADOR ── */
+  .sep { border: none; border-top: 1px solid var(--gris-linea); margin: 20px 0; }
+
+  /* ── CONFIRMACIÓN FINAL ── */
+  .confirmacion {
+    text-align: center;
+    padding: 32px 16px;
+  }
+  .confirmacion-icono {
+    width: 64px; height: 64px;
+    background: var(--verde-palido);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 2rem;
+  }
+  .confirmacion h2 { font-size: 1.2rem; font-weight: 600; color: var(--verde); margin-bottom: 8px; }
+  .confirmacion p { font-size: 0.88rem; color: var(--texto-suave); line-height: 1.5; }
+
+  /* ── ERROR ── */
+  .error-msg {
+    font-size: 0.8rem;
+    color: var(--error);
+    margin-top: 6px;
+    display: none;
+  }
+  .error-msg.visible { display: block; }
+
+  /* ── OCULTO ── */
+  .hidden { display: none !important; }
+
+  /* ── RESUMEN TIEMPOS (oculto visualmente, en form) ── */
+  .meta-oculta { display: none; }
+
+  @media (max-width: 480px) {
+    header { padding: 16px; }
+    header img { height: 42px; }
+    .card { padding: 22px 18px; }
+    .nota-display { font-size: 2.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="https://raw.githubusercontent.com/efrjcode/evaluaciones-efrj/main/assets/escudo_siso.png"
+       alt="Escudo Colegio San Isidro Sur Oriental"
+       onerror="this.style.display='none'">
+  <div class="header-texto">
+    <h1>Autoevaluación · Período 2 · 2026</h1>
+    <p>Colegio San Isidro Sur Oriental IED · Ervin Rueda</p>
+  </div>
+</header>
+
+<main>
+
+<!-- ═══════════════════════════════════════════
+     PASO 0: Selector de curso y nombre
+════════════════════════════════════════════ -->
+<div id="paso-seleccion" class="card">
+  <div class="step-label">Paso 1 de 2</div>
+  <div class="step-title">¿Quién eres y cuál es tu curso?</div>
+
+  <label class="step-label" for="sel-curso" style="margin-bottom:6px;display:block">Curso</label>
+  <select id="sel-curso" onchange="actualizarNombres()">
+    <option value="">— Selecciona tu curso —</option>
+    <option value="703">703 · Matemáticas</option>
+    <option value="903">903 · Matemáticas</option>
+    <option value="1001">1001 · Física</option>
+    <option value="1002">1002 · Física</option>
+    <option value="1003">1003 · Física</option>
+  </select>
+
+  <div style="margin-top:16px">
+    <label class="step-label" for="sel-nombre" style="margin-bottom:6px;display:block">Nombre</label>
+    <select id="sel-nombre" disabled>
+      <option value="">— Primero selecciona tu curso —</option>
+    </select>
+  </div>
+
+  <div id="error-seleccion" class="error-msg">Por favor selecciona tu curso y tu nombre antes de continuar.</div>
+
+  <button class="btn-primary" onclick="iniciarFormulario()">
+    Continuar →
+  </button>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     FORMULARIO PRINCIPAL
+════════════════════════════════════════════ -->
+<div id="formulario-wrap" class="hidden">
+
+  <div class="progreso-wrap">
+    <div class="progreso-bg"><div class="progreso-fill" id="barra-progreso" style="width:0%"></div></div>
+    <span class="progreso-texto" id="texto-progreso">0 / 6</span>
+  </div>
+
+  <div id="info-curso-banner" class="card" style="padding:14px 20px;margin-top:16px;">
+    <div class="info-curso">
+      <span>👤 <strong id="info-nombre">—</strong></span>
+      <span>📚 <strong id="info-curso">—</strong></span>
+      <span>📌 <strong id="info-tema">—</strong></span>
+    </div>
+  </div>
+
+  <!-- Preguntas 1-6 se inyectan aquí -->
+  <div id="contenedor-preguntas"></div>
+
+  <!-- Calificación -->
+  <div id="bloque-nota" class="card hidden">
+    <div class="pregunta-numero">Calificación</div>
+    <div class="pregunta-texto">¿Qué nota te asignas en este período?</div>
+    <div class="pregunta-sub">Mueve el deslizador con cuidado. Llegar a notas altas requiere mayor esfuerzo.</div>
+
+    <div class="nota-wrap">
+      <div class="nota-display" id="nota-display">1.0</div>
+      <!-- Slider personalizado con fricción -->
+      <div id="slider-track" style="position:relative;width:100%;height:28px;cursor:pointer;touch-action:none;user-select:none;">
+        <div style="position:absolute;top:50%;left:0;right:0;height:6px;transform:translateY(-50%);background:var(--gris-linea);border-radius:99px;overflow:hidden;">
+          <div id="slider-fill" style="height:100%;width:0%;background:var(--verde);border-radius:99px;transition:width 0.05s;"></div>
+        </div>
+        <div id="slider-thumb" style="position:absolute;top:50%;left:0%;transform:translate(-50%,-50%);width:22px;height:22px;border-radius:50%;background:var(--verde);border:3px solid white;box-shadow:0 1px 6px rgba(0,0,0,0.25);transition:left 0.05s;"></div>
+      </div>
+      <div class="slider-etiquetas"><span>1.0</span><span>2.0</span><span>3.0</span><span>4.0</span><span>5.0</span></div>
+    </div>
+
+    <div id="aviso-costo" class="aviso-costo">
+      <strong>⚠ Te has asignado la nota máxima.</strong><br>
+      Esto implica que consideras que dominas plenamente los contenidos del período, que participaste de forma consistente y que no tienes debilidades pendientes. <strong>Justifica esta calificación</strong> con evidencias concretas de tu proceso.
+    </div>
+
+    <div id="bloque-justificacion" class="hidden" style="margin-top:14px">
+      <label class="step-label" for="justificacion" style="margin-bottom:6px;display:block">
+        Justificación (mínimo 80 caracteres)
+      </label>
+      <textarea id="justificacion" placeholder="Describe con argumentos y evidencias concretas por qué consideras que mereces 5.0…" oninput="actualizarContadorJustificacion()"></textarea>
+      <div id="contador-justificacion" style="font-size:0.75rem;color:var(--texto-suave);margin-top:4px;font-family:'IBM Plex Mono',monospace;">0 / 80 caracteres</div>
+      <div id="error-justificacion" class="error-msg">Tu justificación debe tener al menos 80 caracteres (te faltan <span id="faltan-caracteres">80</span>).</div>
+    </div>
+
+
+    <button class="btn-primary" id="btn-enviar" onclick="enviarFormulario()" style="margin-top:20px;width:100%;justify-content:center">
+      Enviar autoevaluación
+    </button>
+    <div id="error-envio" class="error-msg" style="text-align:center"></div>
+  </div>
+
+</div><!-- /formulario-wrap -->
+
+<!-- ═══════════════════════════════════════════
+     CONFIRMACIÓN
+════════════════════════════════════════════ -->
+<div id="confirmacion-final" class="card hidden">
+  <div class="confirmacion">
+    <div class="confirmacion-icono">✓</div>
+    <h2>Autoevaluación enviada</h2>
+    <p>Tu respuesta fue registrada correctamente.<br>
+    Gracias por tu reflexión honesta.</p>
+  </div>
+</div>
+
+<!-- Formulario oculto para Netlify -->
+<form name="autoevaluacion-periodo2" method="POST" data-netlify="true"
+      netlify-honeypot="bot-field" id="netlify-form" class="meta-oculta">
+  <input type="hidden" name="form-name" value="autoevaluacion-periodo2">
+  <input name="bot-field">
+  <input name="curso"><input name="nombre"><input name="tema">
+  <input name="p1"><input name="p2"><input name="p3"><input name="p4">
+  <input name="p5"><input name="p6_otro_debilidad">
+  <input name="p6"><input name="p7_otro_fortaleza">
+  <input name="nota"><input name="justificacion">
+  <input name="tiempo_p1"><input name="tiempo_p2"><input name="tiempo_p3">
+  <input name="tiempo_p4"><input name="tiempo_p5"><input name="tiempo_p6">
+</form>
+
+</main>
+
+<script>
+/* ══════════════════════════════════════════════
+   DATOS
+══════════════════════════════════════════════ */
+const ESTUDIANTES = {
+  "703": ["ALVAREZ DIAZ JOSSUE ALEJANDRO","BERNAL FRANCO DAVID STIVEN","BOHORQUEZ RODRIGUEZ ESTIVEN","CAMARGO TRUJILLO NEITHAN SEBASTIAN","CAMARGO VEGA NICOLL SOFIA","CARDENAS PINILLA JHOSER ANDREY","CARMONA FLOREZ JUAN PABLO","CARRANZA TORRES MATIAS EDUARDO","CARRION CHACON GABRIELA","CHIBUQUE BOGOTA YERINJAN ARLEY","DIAZ GOMEZ JOHAN SANTIAGO","ESCARRAGA SASTRE ANGEL JULIAN","ESPINOSA MENDOZA TOMAS DAVID","FIGUEROA DUARTE JUAN CARLOS","FONTECHA GOMEZ SARAY","FUENTES DELGADO JHON MANUEL","GARCIA GUEVARA JULIANA","GIRALDO RUSSI HEYLY DAHYAN","GOMEZ MENGHINI VITTORIA NICOLE","GONZALEZ MORALES DANIEL DAVID","GUARIN HERRERA ALAN JHOEL","HERNANDEZ ARIAS DYLAN STIVEN","JIMENEZ ALMARALES YAMITH JULIAN","MALES TITUANA JEIDEN YOAN","MANRIQUE GUERRERO MIGUEL ANGEL","MORALES ROCHA LUNA CAMILA","MUÑOZ CHAPARRO SERGIO","ORTIZ VASQUEZ JULIAN CAMILO","PANQUEVA BARRERO SHARICK GABRIELA","PEÑA MUÑOZ BLITSY ALEJANDRA","PEÑA SOCHA SHALON VICTORIA","RENDON RIVERA CRISTIAN ALEJANDRO","RIVERO CASTILLO DILAN ESTEBAN","SALAMANCA QUIÑONES DANA ISABELLA","SALAZAR OSPINA EIMY NICOLE","SANCHEZ VASQUEZ JULIAN DAVID","SANTOS LOZANO JEFERSON DANIEL","TORRES CUBILLOS SAMUEL FELIPE","HERNÁNDEZ AGUAS NICOLÁS MATÍAS"],
+  "903": ["AMADO BARBOSA ANGELY SARAY","ASPRILLA LARA JHOAN ESTIBEN","BARON HERNANDEZ KEVIN ALEXIS","BENITEZ PATIÑO DIANA VALENTINA","BUENO BERMUDEZ JEAN PIERRE","CAMPO VARELA DANIELA CAROLINA","CASTELLAR DE LA HOZ JULIANA ALEJANDRA","DEVIA MORALES MIGUEL ANGEL","DIAZ MELO MARYI LIZETH","ECHEVERRI MEJIA SHAROM JISETH","GARCIA MARIN MARIA JOSE","GIRALDO RUSSI HASLY DANEY","GONZALEZ CUPITRA SANTIAGO DAVID","GONZALEZ GUZMAN JUAN DAVID","GUARIN ZAFRANE KEIKO ANGELI","GUTIERREZ JIMÉNEZ GABRIEL ALEXANDER","HERNANDEZ CALDERON ZHARA VALENTINA","HERRERA GARCIA JENNIFER MARIAN","LOPEZ MORALES MIGUEL ANGEL","LOPEZ SANCHEZ JESUS SANTIAGO","LOPEZ SOSA ANNIE MICHETH","MARRUGO RAMOS JORMAN DAVID","MOLINA DUEÑAS MICHELLE SOFIA","MORENO LÓPEZ MARÍA PAULA","MOSQUERA AGUIRRE JUAN MANUEL","MOSQUERA LARA STEFANY","OSPINA RODRIGUEZ SARA VALENTINA","OSTIOS OSTIOS CAMILO ANDRES","OVIEDO GARRIDO FABIAN ALEJANDRO","OYOLA RINCÓN SARA CAMILA","RAMÍREZ CABALLERO DANNALY SOFÍA","RESTREPO RODRIGUEZ RUSBEL MAURICIO","RODRIGUEZ QUINTERO DANNA ISABELLA","RUIZ EGUIS JUAN ESTEBAN","SORIANO FARFÁN ANDRES DAVID","VERGARA OVALLE VALERY YOMARA"],
+  "1001": ["AREVALO PEREA JUAN PABLO","AREVALO VELASQUEZ DYLAN STEVEN","CAPERA MEDINA JOSÉ MANUEL","CONTRERAS CORTES EDGAR NICOLAS","CONTRERAS QUINTERO JOSE GREGORIO","CORTES SOACHE JHOEL ALEJANDRO","FAJARDO TRUJILLO JUAN PABLO","FIERRO ANGARITA ANDRES FENG","FORERO PEREZ ESTEBAN","FORERO VELEZ ANDRES FELIPE","GONZALEZ LOPEZ JUAN SEBASTIAN","GONZALEZ MOLINA MARIA XIMENA","GONZALEZ RONDON ANTHONYS GABRIEL","LOPEZ SOSA DANIEL STEVAN","MANZANILLA LOPEZ SEBASTIAN ALEJANDRO","MARIN ROJAS THOMAS","MARTINEZ CUERVO ANDRES FELIPE","MATURANA ROJAS RICARDO ANDRES","MEJIA AGUIRRE SALOME","MUNAR ENCISO JAVIER SANTIAGO","NAVA MORA JUAN DIEGO","PARDO CHACON MELANY DAYANA","PEREZ CARDENAS JOSEPTH DAVID","PINZON MANTILLA SAMUEL JOSE","PORTILLO ALVAREZ ALEJANDRO GABRIEL","RODRIGUEZ FELACIO OSCAR NICOLAS","RODRIGUEZ LOPEZ DIEGO ALEXANDER","ROMERO ACEVEDO ERIC SANTIAGO","TARAZONA QUINTANILLA MARIA JOSE","TARIFA AYALA ISAAC DANIEL","VALENCIA RUBIO MICHELL ASTRID","FONSECA LÓPEZ MARIANA"],
+  "1002": ["AGUIRRE GONZALEZ SHARON NICOLE","ALAYON AYALON LINA PAOLA","ALONSO TORRES JUAN ESTEBAN","ARCON MIRANDA SHARLEN DAYANA","BERMÚDEZ RODRÍGUEZ ANA SOFÍA","BLANCO ARANGP DALIANA CAMILA","CAÑAS SUÁREZ LUIS SAMUEL","CARDONA CEBALLOS KELLY JOHANA","CHÍA QUIROGA MELANY NATALIA","CUESTA RUIZ DUVAN CAMILO","DAZA RAMÍREZ SHARIT ALEJANDRA","FORERO LAGUNA JUAN SEBASTIAN","GALVIS RIVERA MELANY","HERNÁNDEZ ACERO JUAN ESTEBAN","HERNÁNDEZ RODRÍGUEZ JONNY ALEXIS","LÓPEZ GAONA LAURA TAMARA","MOJICA PÓVEDA MARÍA JOSÉ","MORA CUELLAR DANIEL FELIPE","MORENO CORREA DILAN","ORJUELA MARTINEZ DAVID SANTIAGO","PATERNINA BURGOS NICOLÁS","PERDOMO MARTÍNEZ LISETH DAYAN","PIAMOTE MORENO JUAN MIGUEL","PINZÓN HERNÁNDEZ JUAN CAMILO","REINOSO GIRALDO DAIRON ESTEVEN","REY QUEVEDO TOMÁS LEANDRO","SÁNCHEZ RUEDA JULIÁN ALFONSO","SILVA BUSTOS OMAR JAVIER","TINOCO FUENTES JAIRITH ALFONSO","VALENCIA ORTIZ MICHAEL STIVENSON","VALENCIA VELASQUEZ KEVIN ALONSO","ZAPATA OSPINA MICHELLE","ZAPATA RODRÍGUEZ JUAN SEBASTIÁN","ZUBIETA CAMARGO MARIANA","ROJAS BELTRÁN DANNA SOFÍA"],
+  "1003": ["ABRIL ARIAS VALERIA","AGUDELO NUÑEZ NICOL DAYANA","ALBINO DEVIA YUDI TATIANA","ANDRADE HERNÁNDEZ KEVIN STEVEN","BAHAMÓN LEYTON JHOULER CAMILO","BECERRA RAVELO ANA SOFÍA","BEDOYA CONTO SARA LIZ","BOHOQUEZ DEVIA SARA VALERIA","CAMERO ARANDA DANNA SOFÍA","CASTAÑEDA ARIZA DERLY VALENTINA","CASTIBLANCO VELÁSQUEZ KAREN SOFÍA","CASTRO CASTRO DAVID SANTIAGO","GARCÍA RODRÍGUEZ ASHLEY DAHIAM","GUERRERO PULIDO KAREN SOFÍA","GUTIÉRREZ GUTIÉRREZ EDWIN ALEJANDRO","LENGUA VELÁSQUEZ ISABELLA","MENDEZ ÑUSTES DANNA JULIETH","MORA CABALLERO DIEGO FELIPE","ORGANISTA DEVIA OMAR ALESSANDER","ORJUELA MARTÍNEZ DAVID SANTIAGO","ORTIZ LUGO MARÍA JOSÉ","PADILLA VALLEJO MELANY SOFÍA","PAZO MUÑOZ GERSON JAVIER","PIÑEROS MARTÍNEZ EMILY SOFÍA","PRADA ROJAS JULIAN DAVID","RODRÍGUEZ VELÁSQUEZ KAREN ALEXANDRA","SÁNCHEZ CAMBERO SILVANA PAOLA","SÁNCHEZ CERÓN MARÍA CAMILIA","TORO VILLADIEGO ALEJANDRO","VELÁSQUEZ MARÍN BARBARA ALEJANDRA","ZANGUÑA AMAYA EVELYN YINET","ZULUAGA SALDARRIAGA TATIANA"]
+};
+
+const TEMAS = {
+  "703": "Números enteros",
+  "903": "Sistemas de ecuaciones lineales",
+  "1001": "Cinemática",
+  "1002": "Cinemática",
+  "1003": "Cinemática"
+};
+
+const PREGUNTAS = [
+  {
+    id: "p1",
+    numero: "Pregunta 1 de 6",
+    texto: "¿Puedes explicar con tus propias palabras el concepto central del período?",
+    sub: "Piensa en si serías capaz de enseñárselo a alguien que no lo conoce.",
+    tipo: "escala",
+    opciones: ["Nunca","A veces","Frecuentemente","Siempre"],
+    tiempoMin: 7
+  },
+  {
+    id: "p2",
+    numero: "Pregunta 2 de 6",
+    texto: "Cuando resuelves un ejercicio o problema, ¿entiendes por qué el procedimiento funciona, o sigues pasos sin comprender el porqué?",
+    sub: "Sé honesto/a: entender el porqué es diferente a memorizar pasos.",
+    tipo: "escala",
+    opciones: ["Nunca entiendo el porqué","A veces lo entiendo","Frecuentemente lo entiendo","Siempre entiendo el porqué"],
+    tiempoMin: 8
+  },
+  {
+    id: "p3",
+    numero: "Pregunta 3 de 6",
+    texto: "¿Con qué frecuencia participaste activamente en las actividades de clase?",
+    sub: "Discusiones, talleres, trabajo en grupo, preguntas al docente.",
+    tipo: "escala",
+    opciones: ["Nunca","A veces","Frecuentemente","Siempre"],
+    tiempoMin: 7
+  },
+  {
+    id: "p4",
+    numero: "Pregunta 4 de 6",
+    texto: "Cuando tuviste dudas, ¿las expresaste —al docente, a un compañero, por escrito— o las dejaste pasar?",
+    sub: "Expresar las dudas es parte del proceso de aprender.",
+    tipo: "escala",
+    opciones: ["Siempre las dejé pasar","Casi siempre las dejé pasar","Casi siempre las expresé","Siempre las expresé"],
+    tiempoMin: 7
+  },
+  {
+    id: "p5",
+    numero: "Pregunta 5 de 6",
+    texto: "Identifica tus debilidades en este período",
+    sub: "Selecciona al menos una. Ser honesto/a aquí es el primer paso para mejorar.",
+    tipo: "checkbox",
+    opciones: [
+      "No comprendo bien los conceptos teóricos",
+      "Se me dificulta aplicar lo aprendido a situaciones nuevas",
+      "No participé activamente en clase",
+      "Me costó trabajar con los materiales o actividades propuestas",
+      "Dejé pasar mis dudas sin resolverlas",
+      "No dediqué suficiente tiempo fuera de clase"
+    ],
+    tiempoMin: 6
+  },
+  {
+    id: "p6",
+    numero: "Pregunta 6 de 6",
+    texto: "Identifica tus fortalezas en este período",
+    sub: "Selecciona al menos una. Reconocer lo que haces bien también es aprendizaje.",
+    tipo: "checkbox",
+    opciones: [
+      "Comprendí los conceptos centrales del período",
+      "Pude explicar o ayudar a un compañero/a",
+      "Participé activamente en las actividades de clase",
+      "Relacioné lo aprendido con situaciones de mi vida cotidiana",
+      "Mejoré respecto al período anterior",
+      "Persistí ante las dificultades sin rendirme"
+    ],
+    tiempoMin: 6
+  }
+];
+
+/* ══════════════════════════════════════════════
+   ESTADO
+══════════════════════════════════════════════ */
+let preguntaActual = 0;
+let respuestas = {};
+let tiempos = {};
+let timerInterval = null;
+let tiempoMostrado = null;
+let notaValor = 1.0;
+
+/* ══════════════════════════════════════════════
+   SELECTOR CURSO / NOMBRE
+══════════════════════════════════════════════ */
+function actualizarNombres() {
+  const curso = document.getElementById('sel-curso').value;
+  const sel = document.getElementById('sel-nombre');
+  sel.innerHTML = '<option value="">— Selecciona tu nombre —</option>';
+  if (curso && ESTUDIANTES[curso]) {
+    ESTUDIANTES[curso].forEach(nombre => {
+      const opt = document.createElement('option');
+      opt.value = nombre;
+      opt.textContent = nombre;
+      sel.appendChild(opt);
+    });
+    sel.disabled = false;
+  } else {
+    sel.disabled = true;
+  }
+}
+
+function iniciarFormulario() {
+  const curso = document.getElementById('sel-curso').value;
+  const nombre = document.getElementById('sel-nombre').value;
+  const err = document.getElementById('error-seleccion');
+  if (!curso || !nombre) { err.classList.add('visible'); return; }
+  err.classList.remove('visible');
+
+  document.getElementById('paso-seleccion').classList.add('hidden');
+  document.getElementById('formulario-wrap').classList.remove('hidden');
+
+  document.getElementById('info-nombre').textContent = nombre;
+  document.getElementById('info-curso').textContent = 'Curso ' + curso;
+  document.getElementById('info-tema').textContent = TEMAS[curso];
+
+  mostrarPregunta(0);
+}
+
+/* ══════════════════════════════════════════════
+   PREGUNTAS
+══════════════════════════════════════════════ */
+function mostrarPregunta(idx) {
+  const contenedor = document.getElementById('contenedor-preguntas');
+  contenedor.innerHTML = '';
+
+  if (idx >= PREGUNTAS.length) {
+    document.getElementById('bloque-nota').classList.remove('hidden');
+    actualizarProgreso(PREGUNTAS.length, PREGUNTAS.length);
+    // Inicializar slider con fricción una vez visible el DOM
+    requestAnimationFrame(() => { if (window._initSlider) window._initSlider(); });
+    return;
+  }
+
+  const p = PREGUNTAS[idx];
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.id = 'card-pregunta';
+
+  card.innerHTML = `
+    <div class="pregunta-numero">${p.numero}</div>
+    <div class="pregunta-texto">${p.texto}</div>
+    <div class="pregunta-sub">${p.sub}</div>
+
+    <div class="timer-bar-wrap" id="timer-wrap">
+      <div class="timer-label">
+        <span>Lee la pregunta antes de responder</span>
+        <span class="timer-seconds" id="timer-seg">${p.tiempoMin}s</span>
+      </div>
+      <div class="timer-bar-bg">
+        <div class="timer-bar-fill" id="timer-fill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <button class="btn-secondary" id="btn-ver-opciones" onclick="mostrarOpciones()" disabled>
+      Ver opciones →
+    </button>
+
+    <div id="opciones-contenido" class="opciones-wrap hidden"></div>
+    <div id="error-pregunta" class="error-msg">Por favor selecciona al menos una opción.</div>
+    <button class="btn-primary hidden" id="btn-siguiente" onclick="siguientePregunta()">
+      ${idx < PREGUNTAS.length - 1 ? 'Siguiente →' : 'Continuar →'}
+    </button>
+  `;
+
+  contenedor.appendChild(card);
+  actualizarProgreso(idx, PREGUNTAS.length);
+
+  // Arrancar cronómetro
+  tiempoMostrado = Date.now();
+  iniciarTimer(p.tiempoMin);
+}
+
+function iniciarTimer(segundos) {
+  clearInterval(timerInterval);
+  let restante = segundos;
+  const fill = document.getElementById('timer-fill');
+  const seg = document.getElementById('timer-seg');
+  const btn = document.getElementById('btn-ver-opciones');
+
+  fill.style.width = '0%';
+
+  timerInterval = setInterval(() => {
+    restante -= 0.1;
+    const pct = Math.min(100, ((segundos - restante) / segundos) * 100);
+    fill.style.width = pct + '%';
+    seg.textContent = Math.max(0, Math.ceil(restante)) + 's';
+
+    if (restante <= 0) {
+      clearInterval(timerInterval);
+      seg.textContent = '✓';
+      btn.disabled = false;
+    }
+  }, 100);
+}
+
+function mostrarOpciones() {
+  const tiempoUsado = ((Date.now() - tiempoMostrado) / 1000).toFixed(1);
+  const p = PREGUNTAS[preguntaActual];
+  tiempos[p.id] = tiempoUsado + 's';
+
+  clearInterval(timerInterval);
+  document.getElementById('timer-wrap').classList.add('hidden');
+  document.getElementById('btn-ver-opciones').classList.add('hidden');
+
+  const contenido = document.getElementById('opciones-contenido');
+  contenido.classList.remove('hidden');
+
+  if (p.tipo === 'escala') {
+    contenido.innerHTML = `
+      <select id="respuesta-escala">
+        <option value="">— Selecciona una opción —</option>
+        ${p.opciones.map(o => `<option value="${o}">${o}</option>`).join('')}
+      </select>
+    `;
+  } else {
+    // checkbox
+    const esDebilidades = p.id === 'p5';
+    const idOtro = esDebilidades ? 'otro-debilidad' : 'otro-fortaleza';
+    contenido.innerHTML = `
+      <div class="checkbox-list">
+        ${p.opciones.map((o, i) => `
+          <label class="checkbox-item" id="cb-label-${i}" onclick="toggleCheck(this)">
+            <input type="checkbox" value="${o}" onchange="sincronizarCheck(this, ${i})"> 
+            <span class="checkbox-label">${o}</span>
+          </label>
+        `).join('')}
+        <label class="checkbox-item" id="cb-label-otro" onclick="toggleCheck(this)">
+          <input type="checkbox" value="otro" onchange="toggleOtroInput(this, '${idOtro}')">
+          <span class="checkbox-label">Otro</span>
+        </label>
+        <input type="text" class="otro-input" id="${idOtro}" placeholder="Escribe tu respuesta…">
+      </div>
+    `;
+  }
+
+  document.getElementById('btn-siguiente').classList.remove('hidden');
+}
+
+function toggleCheck(label) {
+  // Solo toggle visual; el checkbox real lo maneja el browser
+}
+
+function sincronizarCheck(cb, idx) {
+  const label = document.getElementById('cb-label-' + idx);
+  if (cb.checked) label.classList.add('checked');
+  else label.classList.remove('checked');
+}
+
+function toggleOtroInput(cb, id) {
+  const input = document.getElementById(id);
+  const label = document.getElementById('cb-label-otro');
+  if (cb.checked) { input.classList.add('visible'); label.classList.add('checked'); }
+  else { input.classList.remove('visible'); label.classList.remove('checked'); }
+}
+
+function siguientePregunta() {
+  const p = PREGUNTAS[preguntaActual];
+  const err = document.getElementById('error-pregunta');
+
+  if (p.tipo === 'escala') {
+    const sel = document.getElementById('respuesta-escala');
+    if (!sel || !sel.value) { err.classList.add('visible'); return; }
+    err.classList.remove('visible');
+    respuestas[p.id] = sel.value;
+  } else {
+    const checks = document.querySelectorAll('#opciones-contenido input[type="checkbox"]:checked');
+    if (checks.length === 0) { err.classList.add('visible'); return; }
+    err.classList.remove('visible');
+    const valores = [];
+    checks.forEach(c => {
+      if (c.value === 'otro') {
+        const idOtro = p.id === 'p5' ? 'otro-debilidad' : 'otro-fortaleza';
+        const txt = document.getElementById(idOtro)?.value?.trim();
+        if (txt) valores.push('Otro: ' + txt);
+      } else {
+        valores.push(c.value);
+      }
+    });
+    respuestas[p.id] = valores.join(' | ');
+  }
+
+  preguntaActual++;
+  mostrarPregunta(preguntaActual);
+}
+
+/* ══════════════════════════════════════════════
+   PROGRESO
+══════════════════════════════════════════════ */
+function actualizarProgreso(actual, total) {
+  const pct = (actual / total) * 100;
+  document.getElementById('barra-progreso').style.width = pct + '%';
+  document.getElementById('texto-progreso').textContent = actual + ' / ' + total;
+}
+
+/* ══════════════════════════════════════════════
+   DESLIZADOR CON FRICCIÓN REAL (Opción C)
+
+   La posición visual del thumb va de 0% a 100%
+   del track, pero el incremento de nota por píxel
+   se hace cada vez más lento a partir de 4.0:
+
+   Zona 1.0–4.0 : factor 1.0  (normal)
+   Zona 4.0–4.5 : factor 0.15 (muy lento)
+   Zona 4.5–4.9 : factor 0.05 (casi no avanza)
+   Zona 4.9–5.0 : factor 0.015 (extremadamente lento)
+
+   El thumb sí avanza visualmente (proporcional a
+   la nota relativa), pero la nota acumula muy poco
+   por cada movimiento en las zonas altas.
+══════════════════════════════════════════════ */
+(function() {
+  let arrastrando = false;
+  let xAnterior = null;
+
+  // Factor de fricción según nota actual
+  function factorFriccion(nota) {
+    if (nota < 4.0) return 1.0;
+    if (nota < 4.5) return 0.15;
+    if (nota < 4.9) return 0.05;
+    return 0.015;
+  }
+
+  // Convierte nota (1.0–5.0) a porcentaje visual del thumb (0–100%)
+  function notaAPct(nota) {
+    return ((nota - 1.0) / 4.0) * 100;
+  }
+
+  function actualizarUI(nota) {
+    nota = Math.max(1.0, Math.min(5.0, nota));
+    notaValor = nota;
+
+    const pct = notaAPct(nota);
+    document.getElementById('slider-thumb').style.left = pct + '%';
+    document.getElementById('slider-fill').style.width = pct + '%';
+
+    // Usar la nota redondeada a 1 decimal (lo que el estudiante realmente ve)
+    // para decidir cuándo activar el aviso y la justificación.
+    const notaMostrada = Math.round(nota * 10) / 10;
+
+    const display = document.getElementById('nota-display');
+    display.textContent = notaMostrada.toFixed(1);
+    display.className = 'nota-display';
+    if (notaMostrada >= 4.9) display.classList.add('maxima');
+    else if (notaMostrada >= 4.5) display.classList.add('alta');
+
+    const aviso = document.getElementById('aviso-costo');
+    const bloqueJust = document.getElementById('bloque-justificacion');
+    if (notaMostrada >= 5.0) {
+      aviso.classList.add('visible');
+      bloqueJust.classList.remove('hidden');
+    } else {
+      aviso.classList.remove('visible');
+      bloqueJust.classList.add('hidden');
+    }
+  }
+
+  // Inicializar eventos después de que el DOM esté listo
+  function initSlider() {
+    const track = document.getElementById('slider-track');
+    if (!track) return;
+
+    // Conversión de delta en píxeles a delta en nota
+    function deltaNotaDesdePx(dx) {
+      const trackW = track.getBoundingClientRect().width;
+      // 1px en zona normal = 4.0/trackW de nota
+      const deltaBase = (dx / trackW) * 4.0;
+      return deltaBase * factorFriccion(notaValor);
+    }
+
+    // Click directo en el track (no arrastre)
+    track.addEventListener('pointerdown', function(e) {
+      e.preventDefault();
+      track.setPointerCapture(e.pointerId);
+      arrastrando = true;
+      xAnterior = e.clientX;
+
+      // Si hizo click directo, saltar a esa posición (solo en zona ≤ 4.0)
+      const rect = track.getBoundingClientRect();
+      const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      const notaClick = 1.0 + pct * 4.0;
+      if (notaClick <= 4.0) {
+        actualizarUI(notaClick);
+      }
+    });
+
+    track.addEventListener('pointermove', function(e) {
+      if (!arrastrando) return;
+      const dx = e.clientX - xAnterior;
+      xAnterior = e.clientX;
+      if (dx !== 0) {
+        actualizarUI(notaValor + deltaNotaDesdePx(dx));
+      }
+    });
+
+    track.addEventListener('pointerup', function(e) {
+      arrastrando = false;
+      xAnterior = null;
+    });
+
+    track.addEventListener('pointercancel', function(e) {
+      arrastrando = false;
+      xAnterior = null;
+    });
+  }
+
+  // Exponer para llamada desde iniciarFormulario
+  window._initSlider = initSlider;
+})();
+
+/* ══════════════════════════════════════════════
+   CONTADOR DE CARACTERES — JUSTIFICACIÓN 5.0
+══════════════════════════════════════════════ */
+const MIN_CARACTERES_JUSTIFICACION = 80;
+
+function actualizarContadorJustificacion() {
+  const texto = document.getElementById('justificacion').value.trim();
+  const len = texto.length;
+  const contador = document.getElementById('contador-justificacion');
+  contador.textContent = len + ' / ' + MIN_CARACTERES_JUSTIFICACION + ' caracteres';
+  contador.style.color = len >= MIN_CARACTERES_JUSTIFICACION ? 'var(--verde)' : 'var(--texto-suave)';
+
+  // Si ya cumplió el mínimo, ocultar el error en vivo
+  if (len >= MIN_CARACTERES_JUSTIFICACION) {
+    document.getElementById('error-justificacion').classList.remove('visible');
+  }
+}
+
+/* ══════════════════════════════════════════════
+   ENVÍO
+══════════════════════════════════════════════ */
+async function enviarFormulario() {
+  const nota = notaValor.toFixed(1);
+  const justificacion = document.getElementById('justificacion')?.value?.trim() || '';
+  const errJust = document.getElementById('error-justificacion');
+  const errEnvio = document.getElementById('error-envio');
+
+  if (parseFloat(nota) >= 5.0 && justificacion.length < MIN_CARACTERES_JUSTIFICACION) {
+    const faltan = MIN_CARACTERES_JUSTIFICACION - justificacion.length;
+    document.getElementById('faltan-caracteres').textContent = faltan;
+    errJust.classList.add('visible');
+    document.getElementById('justificacion').focus();
+    return;
+  }
+  errJust.classList.remove('visible');
+
+  const curso = document.getElementById('sel-curso').value;
+  const nombre = document.getElementById('sel-nombre').value;
+
+  const datos = new URLSearchParams({
+    'form-name': 'autoevaluacion-periodo2',
+    'bot-field': '',
+    'curso': curso,
+    'nombre': nombre,
+    'tema': TEMAS[curso],
+    'p1': respuestas.p1 || '',
+    'p2': respuestas.p2 || '',
+    'p3': respuestas.p3 || '',
+    'p4': respuestas.p4 || '',
+    'p5': respuestas.p5 || '',
+    'p6': respuestas.p6 || '',
+    'nota': nota,
+    'justificacion': justificacion,
+    'tiempo_p1': tiempos.p1 || '',
+    'tiempo_p2': tiempos.p2 || '',
+    'tiempo_p3': tiempos.p3 || '',
+    'tiempo_p4': tiempos.p4 || '',
+    'tiempo_p5': tiempos.p5 || '',
+    'tiempo_p6': tiempos.p6 || ''
+  });
+
+  const btn = document.getElementById('btn-enviar');
+  btn.disabled = true;
+  btn.textContent = 'Enviando…';
+
+  try {
+    const resp = await fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: datos.toString()
+    });
+
+    if (resp.ok || resp.status === 200) {
+      document.getElementById('formulario-wrap').classList.add('hidden');
+      document.getElementById('confirmacion-final').classList.remove('hidden');
+    } else {
+      throw new Error('Error ' + resp.status);
+    }
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = 'Enviar autoevaluación';
+    errEnvio.textContent = 'Hubo un problema al enviar. Intenta de nuevo.';
+    errEnvio.classList.add('visible');
+  }
+}
+</script>
+</body>
+</html>
