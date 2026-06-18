@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coevaluación — Proyecto de Periodo 2 · 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green-900:#1b4d1f;
+    --green-800:#2E7D32;
+    --green-700:#388e3c;
+    --green-600:#43a047;
+    --green-100:#e8f5e9;
+    --green-050:#f3faf3;
+    --ink:#1a2420;
+    --ink-soft:#4a5650;
+    --paper:#ffffff;
+    --line:#d7e3d8;
+    --amber:#b8860b;
+    --red:#b3261e;
+    --red-bg:#fdecea;
+    --blue:#1565c0;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'IBM Plex Sans', sans-serif;
+    background:linear-gradient(180deg,var(--green-050) 0%, #eef6ee 100%);
+    color:var(--ink);
+    min-height:100vh;
+    padding:24px 16px 60px;
+  }
+  .wrap{max-width:820px;margin:0 auto;}
+
+  header.app{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:22px 26px;
+    margin-bottom:18px;
+    box-shadow:0 2px 10px rgba(46,125,50,0.08);
+  }
+  header.app .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--green-700);
+    margin:0 0 6px;
+  }
+  header.app h1{
+    font-size:1.4rem;margin:0 0 6px;color:var(--green-900);font-weight:700;
+  }
+  header.app p.lead{margin:0 0 10px;color:var(--ink-soft);font-size:0.95rem;line-height:1.5;}
+  header.app .privacidad{
+    display:flex;gap:8px;align-items:flex-start;
+    background:var(--green-100);
+    border:1px solid var(--green-600);
+    border-radius:10px;
+    padding:10px 14px;
+    font-size:0.85rem;
+    color:var(--green-900);
+    line-height:1.45;
+  }
+  header.app .privacidad svg{flex:none;margin-top:2px;}
+
+  .card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:20px 22px;
+    margin-bottom:16px;
+    box-shadow:0 2px 10px rgba(46,125,50,0.06);
+  }
+  .card h2{
+    font-size:1rem;
+    color:var(--green-900);
+    margin:0 0 14px;
+    font-weight:600;
+  }
+  .card h2 .num{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:22px;height:22px;border-radius:50%;
+    background:var(--green-800);color:#fff;
+    font-family:'IBM Plex Mono',monospace;font-size:0.72rem;font-weight:600;
+    margin-right:8px;
+  }
+
+  .field{margin-bottom:14px;}
+  .field:last-child{margin-bottom:0;}
+  .field label{
+    display:block;font-size:0.82rem;font-weight:600;color:var(--ink);margin-bottom:5px;
+  }
+  .field select, .field textarea{
+    width:100%;
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:0.95rem;
+    padding:10px 12px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    background:#fff;
+    color:var(--ink);
+  }
+  .field select:disabled{background:#f3f3f1;color:#9aa39a;cursor:not-allowed;}
+  .field select:focus, .field textarea:focus{
+    outline:none;border-color:var(--green-700);box-shadow:0 0 0 3px rgba(56,142,60,0.15);
+  }
+  .field .hint{font-size:0.78rem;color:var(--ink-soft);margin-top:4px;}
+  .field .hint.error{color:var(--red);}
+
+  .dimension-card + .dimension-card{margin-top:16px;}
+  .dim-head h3{font-size:0.95rem;margin:0 0 4px;color:var(--ink);font-weight:600;}
+  .dim-head p{font-size:0.83rem;color:var(--ink-soft);margin:0 0 12px;line-height:1.4;}
+
+  .fs{user-select:none;}
+  .fs-scale{
+    display:flex;justify-content:space-between;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.68rem;color:#9aa39a;margin-bottom:6px;
+  }
+  .fs-track{
+    position:relative;height:8px;border-radius:6px;
+    background:var(--green-100);border:1px solid var(--line);
+    margin:0 10px;
+  }
+  .fs-fill{
+    position:absolute;left:0;top:0;height:100%;border-radius:6px;
+    background:linear-gradient(90deg,var(--green-600),var(--green-800));
+    width:62.5%;
+    pointer-events:none;
+  }
+  .fs-thumb{
+    position:absolute;top:50%;left:62.5%;
+    width:26px;height:26px;border-radius:50%;
+    background:#fff;border:2.5px solid var(--green-800);
+    transform:translate(-50%,-50%);
+    box-shadow:0 2px 6px rgba(27,77,31,0.25);
+    cursor:grab;touch-action:none;
+  }
+  .fs.dragging .fs-thumb{cursor:grabbing;box-shadow:0 3px 10px rgba(27,77,31,0.4);}
+  .fs-thumb:focus{outline:3px solid rgba(56,142,60,0.35);}
+  .fs-readout{
+    display:flex;align-items:baseline;gap:10px;margin-top:10px;
+  }
+  .fs-value{
+    font-family:'IBM Plex Mono',monospace;font-size:1.2rem;font-weight:600;color:var(--green-900);
+    min-width:42px;
+  }
+  .fs-descriptor{
+    font-size:0.82rem;font-weight:600;color:var(--green-700);
+    background:var(--green-100);padding:3px 10px;border-radius:999px;
+  }
+
+  .resumen-box{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--green-050);border:1px dashed var(--green-600);
+    border-radius:10px;padding:14px 16px;
+  }
+  .resumen-box .label{font-size:0.85rem;color:var(--ink-soft);}
+  .resumen-box .valor{
+    font-family:'IBM Plex Mono',monospace;font-size:1.4rem;font-weight:700;color:var(--green-900);
+  }
+  .resumen-box .nota{font-size:0.76rem;color:var(--ink-soft);margin-top:2px;}
+
+  textarea{min-height:90px;resize:vertical;line-height:1.45;}
+  .counter{font-size:0.78rem;color:var(--ink-soft);text-align:right;margin-top:4px;}
+  .counter.ok{color:var(--green-700);}
+
+  .submit-row{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:6px;}
+  button.submit{
+    font-family:'IBM Plex Sans',sans-serif;
+    font-weight:600;font-size:0.98rem;
+    background:var(--green-800);color:#fff;
+    border:none;border-radius:10px;
+    padding:13px 30px;cursor:pointer;
+    transition:background 0.15s ease, transform 0.1s ease;
+    width:100%;max-width:320px;
+  }
+  button.submit:hover:not(:disabled){background:var(--green-900);}
+  button.submit:active:not(:disabled){transform:scale(0.98);}
+  button.submit:disabled{background:#b9c7ba;cursor:not-allowed;}
+  .submit-status{font-size:0.82rem;color:var(--ink-soft);text-align:center;}
+  .submit-status.error{color:var(--red);}
+
+  .pendientes{
+    font-size:0.8rem;color:var(--ink-soft);background:var(--green-050);
+    border-radius:8px;padding:10px 14px;margin-top:4px;
+  }
+  .pendientes ul{margin:6px 0 0;padding-left:18px;}
+  .pendientes.hidden{display:none;}
+
+  .success-screen{
+    background:var(--paper);border:1px solid var(--green-600);border-radius:14px;
+    padding:34px 26px;text-align:center;box-shadow:0 2px 10px rgba(46,125,50,0.08);
+  }
+  .success-screen .check{
+    width:56px;height:56px;border-radius:50%;background:var(--green-100);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 16px;
+  }
+  .success-screen h2{color:var(--green-900);margin:0 0 8px;font-size:1.15rem;}
+  .success-screen p{color:var(--ink-soft);font-size:0.92rem;line-height:1.5;margin:0 0 18px;}
+  .success-screen button{
+    font-family:'IBM Plex Sans',sans-serif;
+    background:transparent;color:var(--green-800);border:1.5px solid var(--green-800);
+    border-radius:8px;padding:9px 18px;font-size:0.85rem;cursor:pointer;font-weight:600;
+  }
+
+  footer.app{text-align:center;margin-top:22px;font-size:0.75rem;color:#8a958a;}
+
+  [hidden]{display:none !important;}
+
+  @media (max-width:480px){
+    body{padding:14px 10px 48px;}
+    header.app, .card{padding:16px 16px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="app">
+    <p class="eyebrow">Colegio San Isidro Sur Oriental IED · Periodo 2 · 2026</p>
+    <h1>Coevaluación del proyecto de periodo</h1>
+    <p class="lead">Vas a evaluar el desempeño de un compañero con quien trabajaste en el proyecto que desarrollaron durante este periodo. Sé honesto y justo: tu mirada ayuda a reconocer el trabajo real de cada integrante del grupo.</p>
+    <div class="privacidad">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1b4d1f" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg>
+      <span>Tu compañero no verá esta evaluación ni quién la hizo. Solo el docente puede revisarla.</span>
+    </div>
+  </header>
+
+  <form id="coeval-form">
+
+    <section class="card">
+      <h2><span class="num">1</span>Identificación</h2>
+      <div class="field">
+        <label for="curso">Curso</label>
+        <select id="curso" required>
+          <option value="" disabled selected>Selecciona tu curso</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="evaluador">Tu nombre</label>
+        <select id="evaluador" disabled required>
+          <option value="" disabled selected>Primero selecciona el curso</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="companero">Compañero que vas a evaluar</label>
+        <select id="companero" disabled required>
+          <option value="" disabled selected>Primero selecciona tu nombre</option>
+        </select>
+        <p class="hint" id="companero-hint"></p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2><span class="num">2</span>Desempeño en el proyecto</h2>
+      <p style="font-size:0.83rem;color:var(--ink-soft);margin:-4px 0 16px;">Desliza el punto verde en cada escala. Cerca del extremo superior el movimiento se vuelve más lento a propósito: tómate el tiempo para decidir si realmente corresponde a la nota más alta.</p>
+
+      <div class="dimension-card" data-dim="contribucion">
+        <div class="dim-head">
+          <h3>2.1 Contribución al trabajo colectivo</h3>
+          <p>Aportó ideas, tareas o avances concretos al desarrollo del proyecto.</p>
+        </div>
+        <div class="fs" id="fs-contribucion"></div>
+      </div>
+
+      <div class="dimension-card" data-dim="comunicacion">
+        <div class="dim-head">
+          <h3>2.2 Comunicación de su trabajo</h3>
+          <p>Explicó con claridad lo que hizo o entendió al resto del grupo.</p>
+        </div>
+        <div class="fs" id="fs-comunicacion"></div>
+      </div>
+
+      <div class="dimension-card" data-dim="responsabilidad">
+        <div class="dim-head">
+          <h3>2.3 Responsabilidad y constancia</h3>
+          <p>Cumplió los compromisos acordados a lo largo del periodo.</p>
+        </div>
+        <div class="fs" id="fs-responsabilidad"></div>
+      </div>
+
+      <div class="dimension-card" data-dim="apoyo">
+        <div class="dim-head">
+          <h3>2.4 Apoyo a los demás</h3>
+          <p>Ayudó a sus compañeros cuando tuvieron dificultades y consideró sus ideas.</p>
+        </div>
+        <div class="fs" id="fs-apoyo"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2><span class="num">3</span>Promedio</h2>
+      <div class="resumen-box">
+        <div>
+          <div class="label">Promedio de las cuatro dimensiones</div>
+          <div class="nota">Este valor aporta el 10% de la nota del periodo de tu compañero.</div>
+        </div>
+        <div class="valor" id="promedio-valor">3.5</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2><span class="num">4</span>Justificación</h2>
+      <div class="field">
+        <label for="justificacion">Explica en general por qué califica así a tu compañero</label>
+        <textarea id="justificacion" placeholder="Por ejemplo: qué hizo bien, en qué podría mejorar, cómo fue trabajar con esa persona..." minlength="40" required></textarea>
+        <div class="counter" id="justificacion-counter">0 / 40 caracteres mínimos</div>
+      </div>
+    </section>
+
+    <div class="submit-row">
+      <button type="submit" class="submit" id="submit-btn">Enviar coevaluación</button>
+      <p class="submit-status" id="submit-status"></p>
+      <div class="pendientes hidden" id="pendientes-box">
+        <strong>Aún falta:</strong>
+        <ul id="pendientes-list"></ul>
+      </div>
+    </div>
+  </form>
+
+  <div class="success-screen" id="success-screen" hidden>
+    <div class="check">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h2>Coevaluación registrada</h2>
+    <p>Gracias por completar la evaluación con honestidad. Tu respuesta fue enviada de forma confidencial.</p>
+    <button type="button" id="reset-btn">Hacer otra evaluación</button>
+  </div>
+
+  <footer class="app">Colegio San Isidro Sur Oriental IED — Coevaluación · Periodo 2 · 2026</footer>
+</div>
+
+<!-- Formulario oculto para que Netlify detecte los campos en el build -->
+<form name="coevaluacion-periodo2" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="coevaluacion-periodo2" />
+  <input name="bot-field" />
+  <input type="text" name="curso" />
+  <input type="text" name="evaluador" />
+  <input type="text" name="companero_evaluado" />
+  <input type="text" name="contribucion" />
+  <input type="text" name="comunicacion" />
+  <input type="text" name="responsabilidad" />
+  <input type="text" name="apoyo" />
+  <input type="text" name="promedio" />
+  <textarea name="justificacion"></textarea>
+</form>
+
+<script>
+(function(){
+  "use strict";
+
+  var ROSTERS = {"703": ["ALVAREZ DIAZ JOSSUE ALEJANDRO", "BERNAL FRANCO DAVID STIVEN", "BOHORQUEZ RODRIGUEZ ESTIVEN", "CAMARGO TRUJILLO NEITHAN SEBASTIAN", "CAMARGO VEGA NICOLL SOFIA", "CARDENAS PINILLA JHOSER ANDREY", "CARMONA FLOREZ JUAN PABLO", "CARRANZA TORRES MATIAS EDUARDO", "CARRION CHACON GABRIELA", "CHIBUQUE BOGOTA YERINJAN ARLEY", "DIAZ GOMEZ JOHAN SANTIAGO", "DUCUARA PERDOMO ANTHUAN SLEVIS", "ESCARRAGA SASTRE ANGEL JULIAN", "ESPINOSA MENDOZA TOMAS DAVID", "FIGUEROA DUARTE JUAN CARLOS", "FONTECHA GOMEZ SARAY", "FUENTES DELGADO JHON MANUEL", "GARCIA GUEVARA JULIANA", "GIRALDO RUSSI HEYLY DAHYAN", "GOMEZ MENGHINI VITTORIA NICOLE", "GONZALEZ MORALES DANIEL DAVID", "GUARIN HERRERA ALAN JHOEL", "HERNANDEZ ARIAS DYLAN STIVEN", "HERNÁNDEZ AGUAS NICOLÁS MATÍAS", "JIMENEZ ALMARALES YAMITH JULIAN", "MALES TITUANA JEIDEN YOAN", "MANRIQUE GUERRERO MIGUEL ANGEL", "MORALES ROCHA LUNA CAMILA", "MUÑOZ CHAPARRO SERGIO", "ORTIZ VASQUEZ JULIAN CAMILO", "PANQUEVA BARRERO SHARICK GABRIELA", "PEÑA MUÑOZ BLITSY ALEJANDRA", "PEÑA SOCHA SHALON VICTORIA", "RENDON RIVERA CRISTIAN ALEJANDRO", "RIVERO CASTILLO DILAN ESTEBAN", "SALAMANCA QUIÑONES DANA ISABELLA", "SALAZAR OSPINA EIMY NICOLE", "SANCHEZ VASQUEZ JULIAN DAVID", "SANTOS LOZANO JEFERSON DANIEL", "TORRES CUBILLOS SAMUEL FELIPE"], "903": ["AMADO BARBOSA ANGELY SARAY", "ASPRILLA LARA JHOAN ESTIBEN", "BARON HERNANDEZ KEVIN ALEXIS", "BENITEZ PATIÑO DIANA VALENTINA", "BUENO BERMUDEZ JEAN PIERRE", "CAMPO VARELA DANIELA CAROLINA", "CASTELLAR DE LA HOZ JULIANA ALEJANDRA", "DEVIA MORALES MIGUEL ANGEL", "DIAZ MELO MARYI LIZETH", "ECHEVERRI MEJIA SHAROM JISETH", "GARCIA MARIN MARIA JOSE", "GIRALDO RUSSI HASLY DANEY", "GONZALEZ CUPITRA SANTIAGO DAVID", "GONZALEZ GUZMAN JUAN DAVID", "GUARIN ZAFRANE KEIKO ANGELI", "GUTIERREZ JIMÉNEZ GABRIEL ALEXANDER", "HERNANDEZ CALDERON ZHARA VALENTINA", "HERRERA GARCIA JENNIFER MARIAN", "LOPEZ MORALES MIGUEL ANGEL", "LOPEZ SANCHEZ JESUS SANTIAGO", "LOPEZ SOSA ANNIE MICHETH", "MARRUGO RAMOS JORMAN DAVID", "MOLINA DUEÑAS MICHELLE SOFIA", "MORENO LÓPEZ MARÍA PAULA", "MOSQUERA AGUIRRE JUAN MANUEL", "MOSQUERA LARA STEFANY", "OSPINA RODRIGUEZ SARA VALENTINA", "OSTIOS OSTIOS CAMILO ANDRES", "OVIEDO GARRIDO FABIAN ALEJANDRO", "OYOLA RINCÓN SARA CAMILA", "PORTILLO CARRASQUERO DARIELYS OLMARIS", "RAMÍREZ CABALLERO DANNALY SOFÍA", "RESTREPO RODRIGUEZ RUSBEL MAURICIO", "RODRIGUEZ QUINTERO DANNA ISABELLA", "RUIZ EGUIS JUAN ESTEBAN", "SORIANO FARFÁN ANDRES DAVID", "VERGARA OVALLE VALERY YOMARA"], "1001": ["AREVALO PEREA JUAN PABLO", "AREVALO VELASQUEZ DYLAN STEVEN", "CAPERA MEDINA JOSÉ MANUEL", "CONTRERAS CORTES EDGAR NICOLAS", "CONTRERAS QUINTERO JOSE GREGORIO", "CORTES SOACHE JHOEL ALEJANDRO", "FAJARDO TRUJILLO JUAN PABLO", "FIERRO ANGARITA ANDRES FENG", "FONSECA LÓPEZ MARIANA", "FORERO PEREZ ESTEBAN", "FORERO VELEZ ANDRES FELIPE", "GONZALEZ LOPEZ JUAN SEBASTIAN", "GONZALEZ MOLINA MARIA XIMENA", "GONZALEZ RONDON ANTHONYS GABRIEL", "LOPEZ SOSA DANIEL STEVAN", "MANZANILLA LOPEZ SEBASTIAN ALEJANDRO", "MARIN ROJAS THOMAS", "MARTINEZ CUERVO ANDRES FELIPE", "MATURANA ROJAS RICARDO ANDRES", "MEJIA AGUIRRE SALOME", "MUNAR ENCISO JAVIER SANTIAGO", "NAVA MORA JUAN DIEGO", "PARDO CHACON MELANY DAYANA", "PEREZ CARDENAS JOSEPTH DAVID", "PINZON MANTILLA SAMUEL JOSE", "PORTILLO ALVAREZ ALEJANDRO GABRIEL", "RODRIGUEZ FELACIO OSCAR NICOLAS", "RODRIGUEZ LOPEZ DIEGO ALEXANDER", "ROMERO ACEVEDO ERIC SANTIAGO", "TARAZONA QUINTANILLA MARIA JOSE", "TARIFA AYALA ISAAC DANIEL", "VALENCIA RUBIO MICHELL ASTRID"], "1002": ["AGUIRRE GONZALEZ SHARON NICOLE", "ALAYON AYALON LINA PAOLA", "ALONSO TORRES JUAN ESTEBAN", "ARCON MIRANDA SHARLEN DAYANA", "BERMÚDEZ RODRÍGUEZ ANA SOFÍA", "BLANCO ARANGP DALIANA CAMILA", "CARDONA CEBALLOS KELLY JOHANA", "CAÑAS SUÁREZ LUIS SAMUEL", "CHÍA QUIROGA MELANY NATALIA", "CUESTA RUIZ DUVAN CAMILO", "DAZA RAMÍREZ SHARIT ALEJANDRA", "FORERO LAGUNA JUAN SEBASTIAN", "GALVIS RIVERA MELANY", "HERNÁNDEZ ACERO JUAN ESTEBAN", "HERNÁNDEZ RODRÍGUEZ JONNY ALEXIS", "LÓPEZ GAONA LAURA TAMARA", "MOJICA PÓVEDA MARÍA JOSÉ", "MORA CUELLAR DANIEL FELIPE", "MORENO CORREA DILAN", "ORJUELA MARTINEZ DAVID SANTIAGO", "PATERNINA BURGOS NICOLÁS", "PERDOMO MARTÍNEZ LISETH DAYAN", "PIAMOTE MORENO JUAN MIGUEL", "PINZÓN HERNÁNDEZ JUAN CAMILO", "REINOSO GIRALDO DAIRON ESTEVEN", "REY QUEVEDO TOMÁS LEANDRO", "ROJAS BELTRÁN DANNA SOFÍA", "SILVA BUSTOS OMAR JAVIER", "SÁNCHEZ RUEDA JULIÁN ALFONSO", "TINOCO FUENTES JAIRITH ALFONSO", "VALENCIA ORTIZ MICHAEL STIVENSON", "VALENCIA VELASQUEZ KEVIN ALONSO", "ZAPATA OSPINA MICHELLE", "ZAPATA RODRÍGUEZ JUAN SEBASTIÁN", "ZUBIETA CAMARGO MARIANA"], "1003": ["ABRIL ARIAS VALERIA", "AGUDELO NUÑEZ NICOL DAYANA", "ALBINO DEVIA YUDI TATIANA", "ANDRADE HERNÁNDEZ KEVIN STEVEN", "BAHAMÓN LEYTON JHOULER CAMILO", "BECERRA RAVELO ANA SOFÍA", "BEDOYA CONTO SARA LIZ", "BOHOQUEZ DEVIA SARA VALERIA", "CAMERO ARANDA DANNA SOFÍA", "CASTAÑEDA ARIZA DERLY VALENTINA", "CASTIBLANCO VELÁSQUEZ KAREN SOFÍA", "CASTRO CASTRO DAVID SANTIAGO", "GARCÍA RODRÍGUEZ ASHLEY DAHIAM", "GUERRERO PULIDO KAREN SOFÍA", "GUTIÉRREZ GUTIÉRREZ EDWIN ALEJANDRO", "LENGUA VELÁSQUEZ ISABELLA", "MENDEZ ÑUSTES DANNA JULIETH", "MORA CABALLERO DIEGO FELIPE", "ORGANISTA DEVIA OMAR ALESSANDER", "ORJUELA MARTÍNEZ DAVID SANTIAGO", "ORTIZ LUGO MARÍA JOSÉ", "PADILLA VALLEJO MELANY SOFÍA", "PAZO MUÑOZ GERSON JAVIER", "PIÑEROS MARTÍNEZ EMILY SOFÍA", "PRADA ROJAS JULIAN DAVID", "RODRÍGUEZ VELÁSQUEZ KAREN ALEXANDRA", "SÁNCHEZ CAMBERO SILVANA PAOLA", "SÁNCHEZ CERÓN MARÍA CAMILIA", "TORO VILLADIEGO ALEJANDRO", "VELÁSQUEZ MARÍN BARBARA ALEJANDRA", "ZANGUÑA AMAYA EVELYN YINET", "ZULUAGA SALDARRIAGA TATIANA"]};
+
+  // ---------- Selects en cascada ----------
+  var cursoSel = document.getElementById('curso');
+  var evaluadorSel = document.getElementById('evaluador');
+  var companeroSel = document.getElementById('companero');
+  var companeroHint = document.getElementById('companero-hint');
+
+  Object.keys(ROSTERS).sort().forEach(function(curso){
+    var opt = document.createElement('option');
+    opt.value = curso;
+    opt.textContent = curso;
+    cursoSel.appendChild(opt);
+  });
+
+  function fillSelect(select, options, placeholder){
+    select.innerHTML = '';
+    var ph = document.createElement('option');
+    ph.value = '';
+    ph.disabled = true;
+    ph.selected = true;
+    ph.textContent = placeholder;
+    select.appendChild(ph);
+    options.forEach(function(name){
+      var opt = document.createElement('option');
+      opt.value = name;
+      opt.textContent = name;
+      select.appendChild(opt);
+    });
+  }
+
+  cursoSel.addEventListener('change', function(){
+    var curso = cursoSel.value;
+    var nombres = ROSTERS[curso] || [];
+    fillSelect(evaluadorSel, nombres, 'Selecciona tu nombre');
+    evaluadorSel.disabled = false;
+    fillSelect(companeroSel, [], 'Primero selecciona tu nombre');
+    companeroSel.disabled = true;
+    companeroHint.textContent = '';
+    validate();
+  });
+
+  evaluadorSel.addEventListener('change', function(){
+    var curso = cursoSel.value;
+    var nombres = (ROSTERS[curso] || []).filter(function(n){ return n !== evaluadorSel.value; });
+    fillSelect(companeroSel, nombres, 'Selecciona a tu compañero');
+    companeroSel.disabled = false;
+    companeroHint.textContent = 'La lista no incluye tu propio nombre.';
+    validate();
+  });
+
+  companeroSel.addEventListener('change', function(){
+    validate();
+  });
+
+  // ---------- Slider de fricción ----------
+  function FrictionSlider(container, opts){
+    this.container = container;
+    this.min = 1.0;
+    this.max = 5.0;
+    this.value = (opts && opts.initial) || 3.5;
+    this.touched = false;
+    this.onchange = (opts && opts.onchange) || function(){};
+    this._build();
+    this._render();
+  }
+
+  FrictionSlider.prototype._build = function(){
+    this.container.innerHTML =
+      '<div class="fs-scale"><span>1.0</span><span>2.5</span><span>3.5</span><span>4.0</span><span>5.0</span></div>' +
+      '<div class="fs-track"><div class="fs-fill"></div>' +
+      '<div class="fs-thumb" role="slider" tabindex="0" aria-valuemin="1" aria-valuemax="5"></div></div>' +
+      '<div class="fs-readout"><span class="fs-value"></span><span class="fs-descriptor"></span></div>';
+    this.track = this.container.querySelector('.fs-track');
+    this.fill = this.container.querySelector('.fs-fill');
+    this.thumb = this.container.querySelector('.fs-thumb');
+    this.valueLabel = this.container.querySelector('.fs-value');
+    this.descLabel = this.container.querySelector('.fs-descriptor');
+    this._bind();
+  };
+
+  FrictionSlider.prototype.frictionAt = function(v){
+    if (v >= 4.9) return 0.015;
+    if (v >= 4.5) return 0.05;
+    if (v >= 4.0) return 0.15;
+    return 1;
+  };
+
+  FrictionSlider.prototype.descriptorFor = function(v){
+    if (v >= 5.0) return 'Sobresaliente';
+    if (v >= 4.0) return 'Satisfactorio';
+    if (v >= 3.5) return 'Aprobatorio';
+    if (v >= 2.0) return 'En proceso';
+    return 'Insuficiente';
+  };
+
+  FrictionSlider.prototype._bind = function(){
+    var self = this;
+    var dragging = false;
+    var lastX = 0;
+
+    function clamp(v){ return Math.min(self.max, Math.max(self.min, v)); }
+
+    function onMove(clientX){
+      if (typeof clientX !== 'number' || !isFinite(clientX)) return;
+      var dx = clientX - lastX;
+      lastX = clientX;
+      var rect = self.track.getBoundingClientRect();
+      var range = self.max - self.min;
+      var dValueRaw = (dx / rect.width) * range;
+      var dValue = dValueRaw * self.frictionAt(self.value);
+      var next = clamp(self.value + dValue);
+      if (isFinite(next)) self.value = next;
+      self.touched = true;
+      self._render();
+    }
+
+    self.thumb.addEventListener('pointerdown', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      dragging = true;
+      lastX = e.clientX;
+      self.container.classList.add('dragging');
+      try { self.thumb.setPointerCapture(e.pointerId); } catch(err){}
+    });
+    self.thumb.addEventListener('pointermove', function(e){
+      if (!dragging) return;
+      onMove(e.clientX);
+    });
+    function endDrag(){
+      if (!dragging) return;
+      dragging = false;
+      self.container.classList.remove('dragging');
+      self.onchange(self.value);
+    }
+    self.thumb.addEventListener('pointerup', endDrag);
+    self.thumb.addEventListener('pointercancel', endDrag);
+
+    self.thumb.addEventListener('keydown', function(e){
+      var step = 0;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowUp') step = 0.1;
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') step = -0.1;
+      else return;
+      e.preventDefault();
+      self.value = clamp(self.value + step * self.frictionAt(self.value));
+      self.touched = true;
+      self._render();
+      self.onchange(self.value);
+    });
+
+    self.track.addEventListener('pointerdown', function(e){
+      e.preventDefault();
+      var rect = self.track.getBoundingClientRect();
+      var clientX = (typeof e.clientX === 'number' && isFinite(e.clientX)) ? e.clientX : rect.left;
+      var ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+      var target = self.min + ratio * (self.max - self.min);
+      self.touched = true;
+      self._animateTo(target);
+    });
+  };
+
+  FrictionSlider.prototype._animateTo = function(target){
+    var self = this;
+    var steps = 24;
+    var i = 0;
+    function tick(){
+      if (i >= steps){ self.onchange(self.value); return; }
+      var remaining = target - self.value;
+      var move = remaining * 0.22 * self.frictionAt(self.value);
+      self.value = Math.min(self.max, Math.max(self.min, self.value + move));
+      self._render();
+      i++;
+      requestAnimationFrame(tick);
+    }
+    tick();
+  };
+
+  FrictionSlider.prototype._render = function(){
+    var pct = ((this.value - this.min) / (this.max - this.min)) * 100;
+    this.fill.style.width = pct + '%';
+    this.thumb.style.left = pct + '%';
+    this.valueLabel.textContent = this.value.toFixed(1);
+    this.descLabel.textContent = this.descriptorFor(this.value);
+    this.thumb.setAttribute('aria-valuenow', this.value.toFixed(1));
+  };
+
+  FrictionSlider.prototype.getValue = function(){
+    return Math.round(this.value * 10) / 10;
+  };
+
+  var dimKeys = ['contribucion','comunicacion','responsabilidad','apoyo'];
+  var sliders = {};
+  dimKeys.forEach(function(key){
+    sliders[key] = new FrictionSlider(document.getElementById('fs-' + key), {
+      initial: 3.5,
+      onchange: updatePromedio
+    });
+  });
+
+  var promedioValorEl = document.getElementById('promedio-valor');
+  function updatePromedio(){
+    var sum = 0;
+    dimKeys.forEach(function(key){ sum += sliders[key].value; });
+    var avg = sum / dimKeys.length;
+    promedioValorEl.textContent = avg.toFixed(2);
+    validate();
+  }
+
+  // ---------- Justificación ----------
+  var justificacionEl = document.getElementById('justificacion');
+  var counterEl = document.getElementById('justificacion-counter');
+  var MIN_CHARS = 40;
+  justificacionEl.addEventListener('input', function(){
+    var len = justificacionEl.value.trim().length;
+    counterEl.textContent = len + ' / ' + MIN_CHARS + ' caracteres mínimos';
+    counterEl.classList.toggle('ok', len >= MIN_CHARS);
+    validate();
+  });
+
+  // ---------- Validación ----------
+  var submitBtn = document.getElementById('submit-btn');
+  var pendientesBox = document.getElementById('pendientes-box');
+  var pendientesList = document.getElementById('pendientes-list');
+
+  function getPendientes(){
+    var pendientes = [];
+    if (!cursoSel.value) pendientes.push('Selecciona tu curso.');
+    if (!evaluadorSel.value) pendientes.push('Selecciona tu nombre.');
+    if (!companeroSel.value) pendientes.push('Selecciona a tu compañero.');
+    if (companeroSel.value && evaluadorSel.value && companeroSel.value === evaluadorSel.value) pendientes.push('No puedes evaluarte a ti mismo.');
+    dimKeys.forEach(function(key, i){
+      if (!sliders[key].touched) pendientes.push('Ajusta la escala ' + (i+1) + ' de la sección 2.');
+    });
+    if (justificacionEl.value.trim().length < MIN_CHARS) pendientes.push('Escribe la justificación (mínimo ' + MIN_CHARS + ' caracteres).');
+    return pendientes;
+  }
+
+  function validate(){
+    var pendientes = getPendientes();
+    if (pendientes.length === 0){
+      pendientesBox.classList.add('hidden');
+    }
+    return pendientes.length === 0;
+  }
+
+  function showPendientes(){
+    var pendientes = getPendientes();
+    pendientesList.innerHTML = '';
+    pendientes.forEach(function(p){
+      var li = document.createElement('li');
+      li.textContent = p;
+      pendientesList.appendChild(li);
+    });
+    pendientesBox.classList.remove('hidden');
+  }
+
+  // ---------- Envío ----------
+  var form = document.getElementById('coeval-form');
+  var statusEl = document.getElementById('submit-status');
+  var successScreen = document.getElementById('success-screen');
+
+  function encode(data){
+    return Object.keys(data).map(function(k){
+      return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]);
+    }).join('&');
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    if (!validate()){
+      showPendientes();
+      return;
+    }
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Enviando…';
+    statusEl.textContent = '';
+    statusEl.classList.remove('error');
+
+    var payload = {
+      'form-name': 'coevaluacion-periodo2',
+      'curso': cursoSel.value,
+      'evaluador': evaluadorSel.value,
+      'companero_evaluado': companeroSel.value,
+      'contribucion': sliders.contribucion.getValue(),
+      'comunicacion': sliders.comunicacion.getValue(),
+      'responsabilidad': sliders.responsabilidad.getValue(),
+      'apoyo': sliders.apoyo.getValue(),
+      'promedio': (function(){
+        var sum = 0; dimKeys.forEach(function(k){ sum += sliders[k].getValue(); });
+        return (sum / dimKeys.length).toFixed(2);
+      })(),
+      'justificacion': justificacionEl.value.trim(),
+      'bot-field': ''
+    };
+
+    fetch(window.location.pathname, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: encode(payload)
+    }).then(function(res){
+      if (res.ok){
+        form.hidden = true;
+        successScreen.hidden = false;
+      } else {
+        throw new Error('status ' + res.status);
+      }
+    }).catch(function(err){
+      statusEl.textContent = 'No se pudo enviar (' + (err && err.message ? err.message : 'error de red') + '). Verifica tu conexión e intenta de nuevo.';
+      statusEl.classList.add('error');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Enviar coevaluación';
+    });
+  });
+
+  document.getElementById('reset-btn').addEventListener('click', function(){
+    window.location.reload();
+  });
+
+  // Estado inicial del promedio (se calcula aquí, al final, cuando todas
+  // las referencias del formulario ya existen)
+  updatePromedio();
+
+})();
+</script>
+</body>
+</html>

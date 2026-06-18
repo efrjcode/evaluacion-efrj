@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluación: Sistemas de Ecuaciones Lineales 2×2 — Grado 9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green-900:#1b4d1f;
+    --green-800:#2E7D32;
+    --green-700:#388e3c;
+    --green-600:#43a047;
+    --green-100:#e8f5e9;
+    --green-050:#f3faf3;
+    --ink:#1a2420;
+    --ink-soft:#4a5650;
+    --paper:#ffffff;
+    --line:#d7e3d8;
+    --amber:#b8860b;
+    --red:#b3261e;
+    --red-bg:#fdecea;
+    --blue:#1565c0;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'IBM Plex Sans', sans-serif;
+    background:linear-gradient(180deg,var(--green-050) 0%, #eef6ee 100%);
+    color:var(--ink);
+    min-height:100vh;
+    padding:24px 16px 60px;
+  }
+  .wrap{max-width:880px;margin:0 auto;}
+  header.app{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:22px 26px;
+    margin-bottom:18px;
+    box-shadow:0 2px 10px rgba(46,125,50,0.08);
+    display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
+  }
+  header.app .title-block h1{
+    font-size:1.25rem;margin:0 0 4px;color:var(--green-900);font-weight:700;
+  }
+  header.app .title-block p{margin:0;color:var(--ink-soft);font-size:0.88rem;}
+  .timer-box{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:1.6rem;font-weight:600;
+    background:var(--green-100);
+    color:var(--green-900);
+    border:1px solid var(--green-600);
+    border-radius:10px;
+    padding:8px 18px;
+    min-width:108px;text-align:center;
+  }
+  .timer-box.warn{background:#fff3e0;border-color:var(--amber);color:#8a5a00;}
+  .timer-box.danger{background:var(--red-bg);border-color:var(--red);color:var(--red);animation:pulse 1s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.55;}}
+
+  .progress-bar{height:8px;border-radius:6px;background:var(--green-100);overflow:hidden;margin-bottom:22px;border:1px solid var(--line);}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--green-600),var(--green-800));transition:width .3s ease;}
+
+  .card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:26px 28px;
+    box-shadow:0 2px 12px rgba(0,0,0,0.05);
+  }
+
+  .name-gate{display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center;padding:40px 20px;}
+  .name-gate h2{color:var(--green-900);margin:0;font-size:1.3rem;}
+  .name-gate p{color:var(--ink-soft);margin:0;max-width:480px;font-size:0.92rem;}
+  .name-gate input{
+    width:100%;max-width:360px;padding:12px 14px;border:1.5px solid var(--line);border-radius:9px;
+    font-size:1rem;font-family:inherit;
+  }
+  .name-gate input:focus{outline:none;border-color:var(--green-600);}
+  .name-gate select{
+    width:100%;max-width:360px;padding:12px 14px;border:1.5px solid var(--line);border-radius:9px;
+    font-size:1rem;font-family:inherit;background:#fff;color:var(--ink);cursor:pointer;
+  }
+  .name-gate select:focus{outline:none;border-color:var(--green-600);}
+  .level-pill{
+    display:inline-block;font-size:0.72rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+    padding:4px 12px;border-radius:20px;margin-bottom:14px;
+  }
+  .level-basico{background:var(--green-100);color:var(--green-800);}
+  .level-intermedio{background:#e3edf9;color:var(--blue);}
+  .level-avanzado{background:#f4e8f7;color:#6a1b9a;}
+
+  .q-text{font-size:1.05rem;line-height:1.55;margin:0 0 18px;color:var(--ink);}
+  .q-text b{color:var(--green-900);}
+
+  .graph-wrap{display:flex;justify-content:center;margin:8px 0 20px;}
+  svg.plane{background:#fbfdfb;border:1px solid var(--line);border-radius:10px;}
+
+  .options{display:flex;flex-direction:column;gap:10px;margin-bottom:6px;}
+  .opt{
+    display:flex;align-items:flex-start;gap:12px;
+    border:1.5px solid var(--line);border-radius:10px;
+    padding:13px 16px;cursor:pointer;background:#fff;
+    transition:border-color .15s, background .15s;
+    font-size:0.96rem;line-height:1.4;
+  }
+  .opt:hover{border-color:var(--green-600);background:var(--green-050);}
+  .opt.selected{border-color:var(--green-700);background:var(--green-100);}
+  .opt.correct{border-color:var(--green-700);background:#e3f5e4;}
+  .opt.incorrect{border-color:var(--red);background:var(--red-bg);}
+  .opt input{accent-color:var(--green-700);margin-top:2px;}
+  .opt .letter{
+    font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--green-800);
+    min-width:20px;
+  }
+
+  .feedback{
+    margin-top:14px;padding:13px 16px;border-radius:10px;font-size:0.9rem;line-height:1.5;
+  }
+  .feedback.ok{background:#e3f5e4;border:1px solid var(--green-700);color:#1b4d1f;}
+  .feedback.bad{background:var(--red-bg);border:1px solid var(--red);color:#7a1f19;}
+
+  .nav-row{display:flex;justify-content:flex-end;margin-top:22px;gap:10px;}
+  button.primary{
+    background:var(--green-700);color:#fff;border:none;border-radius:9px;
+    padding:11px 26px;font-size:0.95rem;font-weight:600;cursor:pointer;
+    font-family:inherit;transition:background .15s;
+  }
+  button.primary:hover{background:var(--green-800);}
+  button.primary:disabled{background:#a9c4ab;cursor:not-allowed;}
+  button.secondary{
+    background:transparent;color:var(--green-800);border:1.5px solid var(--green-700);border-radius:9px;
+    padding:11px 22px;font-size:0.95rem;font-weight:600;cursor:pointer;font-family:inherit;
+  }
+
+  .results{text-align:center;padding:30px 10px;}
+  .results h2{color:var(--green-900);margin-bottom:4px;}
+  .score-circle{
+    width:140px;height:140px;border-radius:50%;
+    background:conic-gradient(var(--green-700) calc(var(--pct,0)*1%), var(--green-100) 0);
+    display:flex;align-items:center;justify-content:center;margin:24px auto;
+    position:relative;
+  }
+  .score-circle::before{
+    content:'';position:absolute;width:112px;height:112px;border-radius:50%;background:#fff;
+  }
+  .score-circle span{position:relative;font-size:1.9rem;font-weight:700;color:var(--green-900);font-family:'IBM Plex Mono',monospace;}
+  .summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:520px;margin:26px auto 10px;}
+  .summary-item{background:var(--green-050);border:1px solid var(--line);border-radius:10px;padding:14px 8px;}
+  .summary-item .num{font-size:1.4rem;font-weight:700;color:var(--green-800);font-family:'IBM Plex Mono',monospace;}
+  .summary-item .lbl{font-size:0.74rem;color:var(--ink-soft);margin-top:2px;}
+  .save-status{margin-top:18px;font-size:0.85rem;color:var(--ink-soft);}
+  .save-status.ok{color:var(--green-800);}
+  .save-status.err{color:var(--red);}
+
+  .level-breakdown{
+    margin:18px auto 6px;font-size:0.92rem;color:var(--ink-soft);
+    background:var(--green-050);border:1px solid var(--line);border-radius:9px;
+    padding:10px 16px;max-width:480px;font-family:'IBM Plex Mono',monospace;
+  }
+  .review-list{
+    max-width:480px;margin:18px auto 0;text-align:left;
+    border:1px solid var(--line);border-radius:10px;overflow:hidden;
+  }
+  .review-item{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:10px 16px;font-size:0.88rem;border-bottom:1px solid var(--line);
+  }
+  .review-item:last-child{border-bottom:none;}
+  .review-item.ok{background:#f3faf3;color:var(--green-900);}
+  .review-item.bad{background:#fdf6f5;color:#7a1f19;}
+  .review-num{font-weight:600;}
+  .review-level{font-size:0.78rem;color:var(--ink-soft);}
+
+  footer.app{text-align:center;margin-top:20px;color:var(--ink-soft);font-size:0.78rem;}
+
+  @media(max-width:560px){
+    header.app{flex-direction:column;align-items:flex-start;}
+    .card{padding:20px 16px;}
+    .summary-grid{grid-template-columns:repeat(3,1fr);gap:8px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="app">
+    <div class="title-block">
+      <h1>Sistemas de Ecuaciones Lineales 2×2</h1>
+      <p>Rectas paralelas, perpendiculares y secantes · Grado 9° · Período 2</p>
+    </div>
+    <div class="timer-box" id="timerBox">10:00</div>
+  </header>
+
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+  <div class="card" id="cardArea"></div>
+
+  <footer class="app">Colegio San Isidro Sur Oriental IED — Campo de Pensamiento Matemático</footer>
+</div>
+
+<!-- Formulario oculto para Netlify Forms -->
+<form name="grado9-sistemas-ecuaciones-rectas" netlify netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="grado9-sistemas-ecuaciones-rectas" />
+  <input name="bot-field" />
+  <input type="text" name="estudiante" />
+  <input type="text" name="aciertos" />
+  <input type="text" name="nota" />
+  <input type="text" name="tiempo" />
+  <input type="text" name="nivel" />
+</form>
+
+<script>
+(function(){
+
+  /* ======================= UTILIDADES NUMÉRICAS ======================= */
+  function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+  function randNonZero(min,max){ let v; do{ v=randInt(min,max); }while(v===0); return v; }
+  function shuffle(arr){
+    const a=arr.slice();
+    for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+    return a;
+  }
+  function toTitleCase(str){
+    return str
+      .toLowerCase()
+      .split(/\s+/)
+      .filter(w=>w.length>0)
+      .map(w=> w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
+  }
+  function fracStr(num,den){
+    // simplifica y devuelve string de fracción m/m2 si aplica, o entero
+    if(den===0) return "indef.";
+    const g=gcd(Math.abs(num),Math.abs(den));
+    let n=num/g, d=den/g;
+    if(d<0){ n=-n; d=-d; }
+    if(d===1) return String(n);
+    return n+"/"+d;
+  }
+  function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a===0?1:a; }
+
+  function signTerm(coef, isFirst){
+    // devuelve término con signo para mostrar "3x" o "- 2x" etc.
+    if(coef===0) return "";
+    const abs = Math.abs(coef);
+    const s = coef<0 ? "-" : (isFirst?"":"+");
+    return (isFirst? (coef<0?"-":"") : " "+s+" ") + (abs===1? "" : abs);
+  }
+
+  function eqString(a,b,c,varX,varY){
+    // a x + b y = c   ->  string bonita
+    let left = "";
+    if(a!==0){
+      left += (a<0?"-":"") + (Math.abs(a)===1? "" : Math.abs(a)) + varX;
+    }
+    if(b!==0){
+      const s = b<0 ? " - " : (left===""? "" : " + ");
+      const startSign = (left==="" && b<0) ? "-" : "";
+      if(left===""){
+        left += (b<0? "-":"") + (Math.abs(b)===1?"":Math.abs(b)) + varY;
+      } else {
+        left += s + (Math.abs(b)===1?"":Math.abs(b)) + varY;
+      }
+    }
+    if(left==="") left="0";
+    return left + " = " + c;
+  }
+
+  /* ======================= MOTOR DE GRÁFICAS SVG ======================= */
+  // Genera un plano cartesiano de -10 a 10 con líneas dadas por (m,b) o por dos puntos.
+  function buildPlane(lines, points, opts){
+    opts = opts || {};
+    const size = 360, pad = 28;
+    const range = 11; // -10..10 con margen
+    const scale = (size - 2*pad) / (2*range);
+    const cx = size/2, cy = size/2;
+
+    function toX(x){ return cx + x*scale; }
+    function toY(y){ return cy - y*scale; }
+
+    let svg = `<svg class="plane" viewBox="0 0 ${size} ${size}" width="320" height="320" xmlns="http://www.w3.org/2000/svg">`;
+
+    // cuadrícula
+    for(let i=-10;i<=10;i+=2){
+      svg += `<line x1="${toX(i)}" y1="${toY(-10)}" x2="${toX(i)}" y2="${toY(10)}" stroke="#e3ece4" stroke-width="1"/>`;
+      svg += `<line x1="${toX(-10)}" y1="${toY(i)}" x2="${toX(10)}" y2="${toY(i)}" stroke="#e3ece4" stroke-width="1"/>`;
+    }
+    // ejes
+    svg += `<line x1="${toX(-10)}" y1="${toY(0)}" x2="${toX(10)}" y2="${toY(0)}" stroke="#7a8b7c" stroke-width="1.3"/>`;
+    svg += `<line x1="${toX(0)}" y1="${toY(-10)}" x2="${toX(0)}" y2="${toY(10)}" stroke="#7a8b7c" stroke-width="1.3"/>`;
+    svg += `<text x="${toX(10)-10}" y="${toY(0)-6}" font-size="9" fill="#7a8b7c" font-family="IBM Plex Mono">x</text>`;
+    svg += `<text x="${toX(0)+6}" y="${toY(10)+10}" font-size="9" fill="#7a8b7c" font-family="IBM Plex Mono">y</text>`;
+
+    // valores numéricos sobre los ejes (cada 2 unidades, omitiendo el 0 para no encimar con el origen)
+    for(let i=-10;i<=10;i+=2){
+      if(i===0) continue;
+      svg += `<text x="${toX(i)-4}" y="${toY(0)+13}" font-size="7.5" fill="#8a988b" font-family="IBM Plex Mono">${i}</text>`;
+      svg += `<text x="${toX(0)+4}" y="${toY(i)+3}" font-size="7.5" fill="#8a988b" font-family="IBM Plex Mono">${i}</text>`;
+    }
+
+    // líneas (cada line: {m,b,color,label} ó {x1,y1,x2,y2,color,label} para segmento por puntos)
+    // En ambos casos la recta se extiende hasta el borde del plano (-10..10), no solo entre los puntos dados.
+    const colors = ["#2E7D32","#1565c0","#b8860b","#6a1b9a"];
+    function clipToRange(x1,y1,x2,y2){
+      // dada una recta definida por dos puntos, devuelve los puntos extendidos hasta los bordes del plano -10..10
+      const dx = x2-x1, dy = y2-y1;
+      if(dx===0){ return {X1:x1, Y1:-10, X2:x2, Y2:10}; } // vertical
+      const m = dy/dx;
+      const b = y1 - m*x1;
+      let X1=-10, Y1=m*X1+b;
+      let X2=10, Y2=m*X2+b;
+      if(Y1>10){ Y1=10; X1=(10-b)/m; }
+      if(Y1<-10){ Y1=-10; X1=(-10-b)/m; }
+      if(Y2>10){ Y2=10; X2=(10-b)/m; }
+      if(Y2<-10){ Y2=-10; X2=(-10-b)/m; }
+      return {X1,Y1,X2,Y2};
+    }
+    (lines||[]).forEach((ln,idx)=>{
+      const color = ln.color || colors[idx%colors.length];
+      let X1,Y1,X2,Y2;
+      if(ln.m!==undefined){
+        X1=-10; Y1=ln.m*X1+ln.b;
+        X2=10; Y2=ln.m*X2+ln.b;
+        if(Y1>10){ Y1=10; X1=(10-ln.b)/ln.m; }
+        if(Y1<-10){ Y1=-10; X1=(-10-ln.b)/ln.m; }
+        if(Y2>10){ Y2=10; X2=(10-ln.b)/ln.m; }
+        if(Y2<-10){ Y2=-10; X2=(-10-ln.b)/ln.m; }
+      } else {
+        const c = clipToRange(ln.x1,ln.y1,ln.x2,ln.y2);
+        X1=c.X1; Y1=c.Y1; X2=c.X2; Y2=c.Y2;
+      }
+      svg += `<line x1="${toX(X1)}" y1="${toY(Y1)}" x2="${toX(X2)}" y2="${toY(Y2)}" stroke="${color}" stroke-width="2.4"/>`;
+      if(ln.label){
+        svg += `<text x="${toX(X2)+ (X2>0? -16:4)}" y="${toY(Y2)+(Y2>0?-6:14)}" font-size="12" font-weight="600" fill="${color}" font-family="IBM Plex Mono">${ln.label}</text>`;
+      }
+    });
+
+    // puntos
+    (points||[]).forEach(p=>{
+      svg += `<circle cx="${toX(p.x)}" cy="${toY(p.y)}" r="4.5" fill="${p.color||'#1a2420'}" stroke="#fff" stroke-width="1.2"/>`;
+      if(p.label){
+        svg += `<text x="${toX(p.x)+7}" y="${toY(p.y)-7}" font-size="11" font-weight="600" fill="${p.color||'#1a2420'}" font-family="IBM Plex Mono">${p.label}</text>`;
+      }
+    });
+
+    svg += `</svg>`;
+    return svg;
+  }
+
+  /* ======================= GENERADORES DE PREGUNTAS ======================= */
+
+  // ---------- BÁSICO: relación entre dos rectas + número de soluciones, a partir de gráfica ----------
+  function genBasico(){
+    const tipo = ["paralelas","perpendiculares","secantes"][randInt(0,2)];
+    // pendientes "amigables" para perpendicularidad exacta en cuadrícula entera visualmente
+    const slopeChoices = [
+      {m:1,perp:-1},{m:-1,perp:1},{m:2,perp:-0.5},{m:-2,perp:0.5},
+      {m:0.5,perp:-2},{m:-0.5,perp:2},{m:3,perp:-1/3},{m:-3,perp:1/3}
+    ];
+    const base = slopeChoices[randInt(0,slopeChoices.length-1)];
+    let m1=base.m, m2, b1=randInt(-4,4), b2;
+
+    if(tipo==="paralelas"){
+      m2=m1;
+      do{ b2=randInt(-4,4); }while(b2===b1);
+    } else if(tipo==="perpendiculares"){
+      m2=base.perp;
+      b2=randInt(-4,4);
+    } else { // secantes
+      const others = slopeChoices.filter(s=>s.m!==m1 && s.m!==base.perp);
+      m2 = others[randInt(0,others.length-1)].m;
+      b2 = randInt(-4,4);
+    }
+
+    const numSol = tipo==="paralelas" ? "ninguna solución" : (tipo==="perpendiculares"||tipo==="secantes") ? "una única solución" : "infinitas soluciones";
+
+    const correcta = {tipo, sol: numSol};
+    const allTipos = ["paralelas","perpendiculares","secantes"];
+    const solMap = {paralelas:"ninguna solución", perpendiculares:"una única solución", secantes:"una única solución"};
+
+    // distractores: combinaciones de tipo incorrecto con su número de soluciones "natural"
+    let opciones = [{tipo:correcta.tipo, sol:correcta.sol, ok:true}];
+    const otrosTipos = allTipos.filter(t=>t!==tipo);
+    otrosTipos.forEach(t=>{
+      opciones.push({tipo:t, sol:solMap[t], ok:false});
+    });
+    // si tipo es perpendiculares o secantes (ambas con "una solución"), agregamos un distractor de número de soluciones cruzado para variar
+    if(tipo!=="paralelas"){
+      opciones.push({tipo:tipo, sol:"infinitas soluciones", ok:false});
+      opciones = opciones.slice(0,4);
+    }
+    opciones = shuffle(opciones).slice(0,4);
+    if(!opciones.some(o=>o.ok)) opciones[0] = {tipo:correcta.tipo, sol:correcta.sol, ok:true};
+
+    const labelTipo = {paralelas:"Paralelas",perpendiculares:"Perpendiculares",secantes:"Secantes (se cruzan)"};
+
+    return {
+      nivel:"basico",
+      enunciado:`Observa las rectas <b>L₁</b> y <b>L₂</b> en el plano. Identifica el tipo de relación entre ellas y el número de soluciones del sistema de ecuaciones que representan.`,
+      graphHTML: buildPlane([
+        {m:m1,b:b1,label:"L₁",color:"#2E7D32"},
+        {m:m2,b:b2,label:"L₂",color:"#1565c0"}
+      ]),
+      opciones: opciones.map(o=>({
+        html:`<b>${labelTipo[o.tipo]}</b> — el sistema tiene ${o.sol}.`,
+        ok:o.ok,
+        feedback: o.ok
+          ? "Correcto: la relación entre las pendientes (y los interceptos cuando aplica) determina exactamente este resultado."
+          : (o.tipo===tipo
+              ? "Identificaste bien el tipo de rectas, pero el número de soluciones que asociaste no corresponde a ese tipo de relación."
+              : "El tipo de relación entre L₁ y L₂ no corresponde a lo que muestra la gráfica: revisa cómo se comparan las pendientes (inclinación) de ambas rectas.")
+      }))
+    };
+  }
+
+  // ---------- BÁSICO (variante): signo de la pendiente — comparar L1 y L2 ----------
+  function genBasicoSigno(){
+    // generar dos rectas con signos de pendiente distintos entre sí (para que la pregunta tenga sentido),
+    // incluyendo ocasionalmente una pendiente nula (horizontal)
+    const opcionesPendiente = [
+      randInt(1,4), randInt(-4,-1),                  // positiva, negativa
+      0,                                               // nula
+      randInt(1,4)*0.5, randInt(-4,-1)*0.5            // positiva/negativa fraccionaria
+    ];
+    let m1 = opcionesPendiente[randInt(0,opcionesPendiente.length-1)];
+    let m2;
+    function signoDe(m){ return m===0 ? "nula" : (m>0 ? "positiva" : "negativa"); }
+    do{ m2 = opcionesPendiente[randInt(0,opcionesPendiente.length-1)]; }
+    while(signoDe(m2)===signoDe(m1));
+
+    const b1 = randInt(-4,4);
+    let b2 = randInt(-4,4);
+
+    // decidir aleatoriamente cuál signo se pregunta (positiva, negativa o nula), priorizando uno presente
+    const signos = [signoDe(m1), signoDe(m2)];
+    const signoPreguntado = signos[randInt(0,1)];
+    const rectaCorrecta = signoDe(m1)===signoPreguntado ? "L₁" : "L₂";
+
+    const nombreSigno = {positiva:"positiva", negativa:"negativa", nula:"nula (igual a cero)"};
+
+    const opciones = [
+      {html:`<b>L₁</b> tiene pendiente ${nombreSigno[signoPreguntado]}.`, ok: rectaCorrecta==="L₁",
+        feedback: rectaCorrecta==="L₁" ? "Correcto: observa la inclinación de L₁ respecto al eje x." : "Incorrecto: revisa si L₁ sube, baja o es horizontal al recorrer el plano de izquierda a derecha."},
+      {html:`<b>L₂</b> tiene pendiente ${nombreSigno[signoPreguntado]}.`, ok: rectaCorrecta==="L₂",
+        feedback: rectaCorrecta==="L₂" ? "Correcto: observa la inclinación de L₂ respecto al eje x." : "Incorrecto: revisa si L₂ sube, baja o es horizontal al recorrer el plano de izquierda a derecha."},
+      {html:`Ambas rectas tienen pendiente ${nombreSigno[signoPreguntado]}.`, ok:false,
+        feedback:"Incorrecto: solo una de las dos rectas tiene ese signo de pendiente; compáralas con cuidado."},
+      {html:`Ninguna de las dos rectas tiene pendiente ${nombreSigno[signoPreguntado]}.`, ok:false,
+        feedback:"Incorrecto: una de las dos rectas sí presenta ese signo de pendiente."}
+    ];
+
+    return {
+      nivel:"basico",
+      enunciado:`Observa las rectas <b>L₁</b> y <b>L₂</b> en el plano. ¿Cuál de las siguientes afirmaciones es correcta respecto al signo de su pendiente?`,
+      graphHTML: buildPlane([
+        {m:m1,b:b1,label:"L₁",color:"#2E7D32"},
+        {m:m2,b:b2,label:"L₂",color:"#1565c0"}
+      ]),
+      opciones: shuffle(opciones)
+    };
+  }
+
+  // ---------- BÁSICO (variante): magnitud de la pendiente — comparar L1 y L2 ----------
+  function genBasicoMagnitud(){
+    // dos pendientes con distinta magnitud (valor absoluto), para preguntar cuál es mayor/menor
+    const magnitudes = [0.5, 1, 2, 3, 4];
+    let idx1 = randInt(0,magnitudes.length-1);
+    let idx2;
+    do{ idx2 = randInt(0,magnitudes.length-1); } while(idx2===idx1);
+
+    const signo1 = Math.random()<0.5 ? 1 : -1;
+    const signo2 = Math.random()<0.5 ? 1 : -1;
+    const m1 = magnitudes[idx1]*signo1;
+    const m2 = magnitudes[idx2]*signo2;
+
+    const b1 = randInt(-4,4);
+    const b2 = randInt(-4,4);
+
+    const mayor = Math.abs(m1) > Math.abs(m2) ? "L₁" : "L₂";
+    const menor = mayor==="L₁" ? "L₂" : "L₁";
+    const preguntarMayor = Math.random() < 0.5;
+    const rectaCorrecta = preguntarMayor ? mayor : menor;
+
+    const opciones = [
+      {html:`<b>L₁</b> tiene ${preguntarMayor?"mayor":"menor"} inclinación (pendiente con ${preguntarMayor?"mayor":"menor"} valor absoluto) que L₂.`, ok: rectaCorrecta==="L₁",
+        feedback: rectaCorrecta==="L₁" ? "Correcto: compara cuánto se inclina cada recta respecto a la horizontal, sin importar el signo." : "Incorrecto: al comparar el valor absoluto de las pendientes, esta afirmación no se cumple."},
+      {html:`<b>L₂</b> tiene ${preguntarMayor?"mayor":"menor"} inclinación (pendiente con ${preguntarMayor?"mayor":"menor"} valor absoluto) que L₁.`, ok: rectaCorrecta==="L₂",
+        feedback: rectaCorrecta==="L₂" ? "Correcto: compara cuánto se inclina cada recta respecto a la horizontal, sin importar el signo." : "Incorrecto: al comparar el valor absoluto de las pendientes, esta afirmación no se cumple."},
+      {html:`Ambas rectas tienen la misma inclinación.`, ok:false,
+        feedback:"Incorrecto: las dos rectas tienen distinta inclinación; una sube o baja más rápido que la otra."},
+      {html:`No es posible comparar la inclinación de las dos rectas a partir de la gráfica.`, ok:false,
+        feedback:"Incorrecto: sí es posible comparar la inclinación observando cuánto se eleva o desciende cada recta en el plano."}
+    ];
+
+    return {
+      nivel:"basico",
+      enunciado:`Observa las rectas <b>L₁</b> y <b>L₂</b> en el plano. ¿Cuál de las siguientes afirmaciones sobre la magnitud de su pendiente (inclinación) es correcta?`,
+      graphHTML: buildPlane([
+        {m:m1,b:b1,label:"L₁",color:"#2E7D32"},
+        {m:m2,b:b2,label:"L₂",color:"#1565c0"}
+      ]),
+      opciones: shuffle(opciones)
+    };
+  }
+
+
+  function genIntermedioA(){
+    // sistema con solución entera conocida (x0,y0)
+    const x0 = randInt(-5,5), y0 = randInt(-5,5);
+    let a1,b1,a2,b2;
+    do{ a1=randNonZero(-4,4); b1=randNonZero(-4,4); a2=randNonZero(-4,4); b2=randNonZero(-4,4); }
+    while( (a1*b2 - a2*b1) === 0 ); // garantizar solución única
+    const c1 = a1*x0 + b1*y0;
+    const c2 = a2*x0 + b2*y0;
+
+    const esSolucionCorrecta = Math.random() < 0.5;
+    let px, py, motivoFalla="";
+    if(esSolucionCorrecta){
+      px = x0; py = y0;
+    } else {
+      // generar un punto que falle, con un error típico
+      const tipoError = randInt(0,2);
+      if(tipoError===0){ px=y0; py=x0; motivoFalla="coordenadas invertidas (x e y intercambiadas)"; }
+      else if(tipoError===1){ px=x0+randNonZero(-2,2); py=y0; motivoFalla="satisface aproximadamente pero no exactamente una de las ecuaciones"; }
+      else { px=x0; py=y0+randNonZero(-2,2); motivoFalla="cumple una ecuación pero no la otra"; }
+      if(px===x0 && py===y0){ px=x0+1; }
+    }
+
+    const cumple1 = (a1*px + b1*py === c1);
+    const cumple2 = (a2*px + b2*py === c2);
+    const esSolucionReal = cumple1 && cumple2;
+
+    const eq1 = eqString(a1,b1,c1,"x","y");
+    const eq2 = eqString(a2,b2,c2,"x","y");
+
+    const opciones = [
+      {html:`Sí, el punto (${px}, ${py}) es solución del sistema.`, ok: esSolucionReal,
+        feedback: esSolucionReal ? "Correcto: el punto satisface ambas ecuaciones simultáneamente." : `Incorrecto: aunque parece cercano, el punto no satisface ${cumple1&&!cumple2?"la segunda ecuación":(!cumple1&&cumple2?"la primera ecuación":"ninguna de las dos ecuaciones")}.`},
+      {html:`No, el punto (${px}, ${py}) no es solución porque no cumple ninguna de las dos ecuaciones.`, ok: (!cumple1 && !cumple2) && !esSolucionReal,
+        feedback: (!cumple1 && !cumple2) ? "Correcto: el punto no satisface ninguna de las dos ecuaciones." : "Esta afirmación no es precisa: revisa si el punto cumple alguna de las ecuaciones por separado."},
+      {html:`No, el punto (${px}, ${py}) no es solución porque cumple solo una de las dos ecuaciones.`, ok: (cumple1 !== cumple2),
+        feedback: (cumple1 !== cumple2) ? "Correcto: para ser solución del sistema, un punto debe satisfacer ambas ecuaciones a la vez, no solo una." : "Esta afirmación no corresponde a lo que ocurre realmente con este punto."},
+      {html:`Sí, es solución porque cumple al menos una de las dos ecuaciones.`, ok:false,
+        feedback:"Incorrecto: ser solución de un sistema exige cumplir TODAS las ecuaciones simultáneamente, no basta con una sola."}
+    ];
+
+    // garantizar exactamente una correcta
+    let correctas = opciones.filter(o=>o.ok);
+    if(correctas.length!==1){
+      // recalcular manualmente cuál debería ser verdadera
+      opciones.forEach(o=>o.ok=false);
+      if(esSolucionReal) opciones[0].ok=true;
+      else if(!cumple1 && !cumple2) opciones[1].ok=true;
+      else opciones[2].ok=true;
+    }
+
+    return {
+      nivel:"intermedio",
+      enunciado:`Dado el sistema de ecuaciones:<br><span style="font-family:'IBM Plex Mono',monospace;display:block;margin:10px 0;font-size:1.05rem;">${eq1}<br>${eq2}</span>¿Qué se puede afirmar sobre el punto (${px}, ${py})?`,
+      graphHTML:null,
+      opciones: shuffle(opciones)
+    };
+  }
+
+  // ---------- INTERMEDIO B: hallar el punto que forma L2 paralela/perpendicular a L1 ----------
+  function genIntermedioB(){
+    const pedirPerp = Math.random() < 0.5;
+    // L1 por dos puntos enteros con pendiente "amigable"
+    const slopes = [1,-1,2,-2,0.5,-0.5,3,-3];
+    const m1 = slopes[randInt(0,slopes.length-1)];
+    const x1a = randInt(-6,2);
+    const y1a = randInt(-6,2);
+    const dx = (Math.abs(m1)<1)? (m1>0?2:2) : 1;
+    const x1b = x1a + (Math.abs(m1)<1 ? 2 : 1) * (m1<0? -1:1) * (Math.abs(m1)<1?1:1);
+    // construir segundo punto de L1 garantizando pendiente exacta m1
+    let P1x=x1a, P1y=y1a, P2x, P2y;
+    const stepX = (Math.abs(m1)<1)? 2 : 1;
+    P2x = P1x + stepX;
+    P2y = P1y + m1*stepX;
+
+    // punto fijo P, fuera de L1
+    let Px = randInt(-7,7), Py = randInt(-7,7);
+    // asegurar que P no está sobre L1
+    if( (Py-P1y) === m1*(Px-P1x) ){ Px += 1; }
+
+    const targetSlope = pedirPerp ? (-1/m1) : m1;
+
+    // construir el punto correcto Q tal que pendiente(P,Q) = targetSlope, con coordenadas enteras
+    let stepQ = (Math.abs(targetSlope)<1)? 2 : 1;
+    let Qx_correct = Px + stepQ;
+    let Qy_correct = Py + targetSlope*stepQ;
+    // si no es entero, ajustar step
+    if(Math.abs(Qy_correct - Math.round(Qy_correct)) > 1e-9){
+      stepQ = (Math.abs(targetSlope)===0.5||Math.abs(targetSlope)===1/3)? (Math.abs(targetSlope)<1? 2: stepQ) : stepQ;
+      // fallback genérico: forzar denominador
+      const denom = targetSlope===0 ? 1 : (Number.isInteger(targetSlope)?1: (Math.abs(targetSlope)===0.5?2:(Math.abs(targetSlope)===1/3?3:2)));
+      stepQ = denom;
+      Qx_correct = Px + stepQ;
+      Qy_correct = Py + targetSlope*stepQ;
+    }
+    Qx_correct = Math.round(Qx_correct);
+    Qy_correct = Math.round(Qy_correct);
+
+    // distractores: usar pendiente de L1 (error: no diferenciar paralela/perpendicular), usar reciproco positivo (error de signo), usar pendiente inversa al revés
+    const wrongSlopes = [];
+    wrongSlopes.push(m1); // confundir con "misma pendiente que L1" (clásico al pedir perpendicular)
+    wrongSlopes.push(pedirPerp ? Math.abs(1/m1) : -m1); // error de signo
+    wrongSlopes.push(pedirPerp ? m1*-1*-1 : (-1/m1)); // confundir paralela/perpendicular al revés
+
+    function buildPointForSlope(slope){
+      let st = Number.isInteger(slope)?1:(Math.abs(slope)===0.5?2:(Math.abs(slope)===1/3?3:2));
+      let qx = Px + st;
+      let qy = Py + slope*st;
+      return {x:Math.round(qx), y:Math.round(qy)};
+    }
+
+    let distractores = wrongSlopes.map(buildPointForSlope);
+    // eliminar duplicados con la correcta o entre sí
+    let candidatos = [{x:Qx_correct,y:Qy_correct,ok:true}];
+    distractores.forEach(d=>{
+      if(!candidatos.some(c=>c.x===d.x && c.y===d.y)){
+        candidatos.push({x:d.x,y:d.y,ok:false});
+      }
+    });
+    // completar si faltan por duplicados, con jitter aleatorio
+    while(candidatos.length<4){
+      const jx = Px + randNonZero(-4,4);
+      const jy = Py + randNonZero(-4,4);
+      if(!candidatos.some(c=>c.x===jx&&c.y===jy)){
+        candidatos.push({x:jx,y:jy,ok:false});
+      }
+    }
+    candidatos = candidatos.slice(0,4);
+    if(!candidatos.some(c=>c.ok)) candidatos[0]={x:Qx_correct,y:Qy_correct,ok:true};
+
+    const relWord = pedirPerp ? "perpendicular" : "paralela";
+
+    return {
+      nivel:"intermedio",
+      enunciado:`La recta <b>L₁</b> pasa por los puntos graficados, y se marca un punto fijo <b>P(${Px}, ${Py})</b>. ¿Cuál de las siguientes opciones, junto con P, forma una recta <b>L₂ ${relWord}</b> a L₁?`,
+      graphHTML: buildPlane(
+        [{x1:P1x,y1:P1y,x2:P2x,y2:P2y,label:"L₁",color:"#2E7D32"}],
+        [{x:Px,y:Py,label:"P",color:"#b8860b"}]
+      ),
+      opciones: shuffle(candidatos).map(c=>({
+        html:`(${c.x}, ${c.y})`,
+        ok:c.ok,
+        feedback: c.ok
+          ? `Correcto: la pendiente entre P y este punto es ${pedirPerp? "el recíproco negativo de":"igual a"} la pendiente de L₁, lo que garantiza que L₂ sea ${relWord} a L₁.`
+          : (pedirPerp
+              ? "Incorrecto: este punto genera una recta con la misma pendiente de L₁ (o con el signo equivocado en el recíproco), por lo que no es perpendicular."
+              : "Incorrecto: la pendiente entre P y este punto no coincide con la de L₁, por lo que la recta resultante no es paralela.")
+      }))
+    };
+  }
+
+  // ---------- AVANZADO: 4 puntos → ¿se cruzan las rectas? ¿dónde? ----------
+  function genAvanzado(){
+    // decidir si se cruzan o son paralelas (para variar el reto)
+    const seCruza = Math.random() < 0.7;
+
+    let P1,P2,P3,P4, interX, interY;
+
+    if(seCruza){
+      // elegir intersección entera
+      interX = randInt(-6,6);
+      interY = randInt(-6,6);
+      const slopes = [1,-1,2,-2,0.5,-0.5,3,-3];
+      let m1 = slopes[randInt(0,slopes.length-1)];
+      let m2 = slopes[randInt(0,slopes.length-1)];
+      while(m2===m1) m2 = slopes[randInt(0,slopes.length-1)];
+
+      function pointsFromSlopeThrough(m, ix, iy){
+        const step = Number.isInteger(m)?1:(Math.abs(m)===0.5?2:(Math.abs(m)===1/3?3:2));
+        const x1 = ix - step, y1 = iy - m*step;
+        const x2 = ix + step, y2 = iy + m*step;
+        return [{x:Math.round(x1),y:Math.round(y1)},{x:Math.round(x2),y:Math.round(y2)}];
+      }
+      [P1,P2] = pointsFromSlopeThrough(m1, interX, interY);
+      [P3,P4] = pointsFromSlopeThrough(m2, interX, interY);
+    } else {
+      // rectas paralelas (no se cruzan)
+      const slopes = [1,-1,2,-2,0.5,-0.5];
+      const m = slopes[randInt(0,slopes.length-1)];
+      const step = Number.isInteger(m)?1:2;
+      const x1=randInt(-6,0), y1=randInt(-6,0);
+      P1={x:x1,y:y1}; P2={x:x1+step, y:y1+m*step};
+      const offset = randNonZero(2,5);
+      const x3 = x1 + randInt(-2,2);
+      const y3 = y1 + offset;
+      P3={x:x3,y:y3}; P4={x:x3+step, y:y3+m*step};
+      interX=null; interY=null;
+    }
+
+    const correctaTxt = seCruza
+      ? `Sí se cruzan, en el punto (${interX}, ${interY}).`
+      : `No se cruzan: las rectas son paralelas.`;
+
+    let opciones = [];
+    if(seCruza){
+      opciones.push({html:correctaTxt, ok:true, feedback:"Correcto: al resolver el sistema formado por ambas rectas, este es el punto donde coinciden."});
+      // distractores con errores típicos: signo invertido, coordenadas intercambiadas, desplazamiento de 1 unidad
+      opciones.push({html:`Sí se cruzan, en el punto (${-interX}, ${interY}).`, ok:false, feedback:"Incorrecto: revisa el signo de la coordenada x al resolver el sistema; parece que se invirtió."});
+      opciones.push({html:`Sí se cruzan, en el punto (${interY}, ${interX}).`, ok:false, feedback:"Incorrecto: las coordenadas x e y del punto de intersección están intercambiadas."});
+      opciones.push({html:`No se cruzan: las rectas son paralelas.`, ok:false, feedback:"Incorrecto: las pendientes de ambas rectas son diferentes, por lo tanto sí existe un punto de intersección."});
+    } else {
+      opciones.push({html:correctaTxt, ok:true, feedback:"Correcto: ambas rectas tienen la misma pendiente y diferente intercepto, por lo cual nunca se cruzan."});
+      opciones.push({html:`Sí se cruzan, en el punto (${P1.x}, ${P1.y}).`, ok:false, feedback:"Incorrecto: ese es uno de los puntos dados para la primera recta, no un punto de intersección real entre ambas rectas."});
+      opciones.push({html:`Sí se cruzan, en el punto (${P3.x}, ${P3.y}).`, ok:false, feedback:"Incorrecto: ese es uno de los puntos dados para la segunda recta; calcula la pendiente de ambas rectas para verificar si realmente se cruzan."});
+      opciones.push({html:`Sí se cruzan, pero no en un punto de coordenadas enteras.`, ok:false, feedback:"Incorrecto: si calculas la pendiente de cada recta verás que son iguales, lo cual significa que no se cruzan en ningún punto."});
+    }
+
+    return {
+      nivel:"avanzado",
+      enunciado:`Una recta <b>L₁</b> pasa por los puntos A(${P1.x}, ${P1.y}) y B(${P2.x}, ${P2.y}). Otra recta <b>L₂</b> pasa por los puntos C(${P3.x}, ${P3.y}) y D(${P4.x}, ${P4.y}). ¿Las rectas L₁ y L₂ se cruzan? Si es así, ¿en qué punto?`,
+      graphHTML: buildPlane(
+        [{x1:P1.x,y1:P1.y,x2:P2.x,y2:P2.y,label:"L₁",color:"#2E7D32"},
+         {x1:P3.x,y1:P3.y,x2:P4.x,y2:P4.y,label:"L₂",color:"#1565c0"}],
+        [{x:P1.x,y:P1.y,label:"A",color:"#1a2420"},{x:P2.x,y:P2.y,label:"B",color:"#1a2420"},
+         {x:P3.x,y:P3.y,label:"C",color:"#1a2420"},{x:P4.x,y:P4.y,label:"D",color:"#1a2420"}]
+      ),
+      opciones: shuffle(opciones)
+    };
+  }
+
+  /* ======================= CONSTRUIR EVALUACIÓN COMPLETA ======================= */
+  function buildExam(){
+    const qs = [];
+    qs.push(genBasico());
+    qs.push(genBasico());
+    qs.push(genBasicoSigno());
+    qs.push(genBasicoMagnitud());
+    qs.push(genIntermedioA());
+    qs.push(genIntermedioB());
+    qs.push(genAvanzado());
+    qs.push(genAvanzado());
+    return qs; // orden fijo por nivel (básico→intermedio→avanzado); las opciones internas ya están aleatorizadas
+  }
+
+  /* ======================= ESTADO Y CONTROL DE LA APP ======================= */
+  const state = {
+    nombre:"",
+    preguntas: [],
+    idx: 0,
+    respuestas: [], // {ok:bool}
+    startTime: null,
+    timeLeft: 600, // 10 minutos
+    timerInterval: null,
+    finished:false
+  };
+
+  const cardArea = document.getElementById('cardArea');
+  const timerBox = document.getElementById('timerBox');
+  const progressFill = document.getElementById('progressFill');
+
+  function fmtTime(s){
+    const m = Math.floor(s/60), sec = s%60;
+    return String(m).padStart(2,'0')+":"+String(sec).padStart(2,'0');
+  }
+
+  function startTimer(){
+    state.startTime = Date.now();
+    state.timerInterval = setInterval(()=>{
+      state.timeLeft--;
+      if(state.timeLeft<=0){
+        state.timeLeft=0;
+        clearInterval(state.timerInterval);
+        finishExam(true);
+        return;
+      }
+      renderTimer();
+    },1000);
+    renderTimer();
+  }
+
+  function renderTimer(){
+    timerBox.textContent = fmtTime(state.timeLeft);
+    timerBox.classList.remove('warn','danger');
+    if(state.timeLeft<=60) timerBox.classList.add('danger');
+    else if(state.timeLeft<=180) timerBox.classList.add('warn');
+  }
+
+  /* ======================= LISTA DE ESTUDIANTES (903) ======================= */
+  const LISTA_ESTUDIANTES = ["Amado Barbosa Angely Saray", "Asprilla Lara Jhoan Estiben", "Baron Hernandez Kevin Alexis", "Benitez Patiño Diana Valentina", "Bueno Bermudez Jean Pierre", "Campo Varela Daniela Carolina", "Castellar De La Hoz Juliana Alejandra", "Devia Morales Miguel Angel", "Diaz Melo Maryi Lizeth", "Echeverri Mejia Sharom Jiseth", "Garcia Marin Maria Jose", "Giraldo Russi Hasly Daney", "Gonzalez Cupitra Santiago David", "Gonzalez Guzman Juan David", "Guarin Zafrane Keiko Angeli", "Gutierrez Jiménez Gabriel Alexander", "Hernandez Calderon Zhara Valentina", "Herrera Garcia Jennifer Marian", "Lopez Morales Miguel Angel", "Lopez Sanchez Jesus Santiago", "Lopez Sosa Annie Micheth", "Marrugo Ramos Jorman David", "Molina Dueñas Michelle Sofia", "Moreno López María Paula", "Mosquera Aguirre Juan Manuel", "Mosquera Lara Stefany", "Ospina Rodriguez Sara Valentina", "Ostios Ostios Camilo Andres", "Oviedo Garrido Fabian Alejandro", "Oyola Rincón Sara Camila", "Portillo Carrasquero Darielys Olmaris", "Ramírez Caballero Dannaly Sofía", "Restrepo Rodriguez Rusbel Mauricio", "Rodriguez Quintero Danna Isabella", "Ruiz Eguis Juan Esteban", "Soriano Farfán Andres David", "Vergara Ovalle Valery Yomara"];
+
+  function renderNameGate(){
+    const optionsHTML = LISTA_ESTUDIANTES.map(n=>`<option value="${n}">${n}</option>`).join("");
+    cardArea.innerHTML = `
+      <div class="name-gate">
+        <h2>Evaluación: Sistemas de Ecuaciones Lineales 2×2</h2>
+        <p>Identifica relaciones entre rectas (paralelas, perpendiculares, secantes) y su conexión con la solución de un sistema 2×2. La evaluación tiene 8 preguntas y un tiempo límite de 10 minutos.</p>
+        <select id="nameInput">
+          <option value="" disabled selected>Selecciona tu nombre</option>
+          ${optionsHTML}
+        </select>
+        <button class="primary" id="startBtn">Comenzar evaluación</button>
+      </div>`;
+    document.getElementById('startBtn').addEventListener('click', ()=>{
+      const val = document.getElementById('nameInput').value;
+      if(!val){ alert("Por favor selecciona tu nombre antes de comenzar."); return; }
+      state.nombre = val;
+      state.preguntas = buildExam();
+      state.idx = 0;
+      state.respuestas = [];
+      startTimer();
+      renderQuestion();
+    });
+  }
+
+  function levelLabel(n){
+    if(n==='basico') return '<span class="level-pill level-basico">Nivel básico</span>';
+    if(n==='intermedio') return '<span class="level-pill level-intermedio">Nivel intermedio</span>';
+    return '<span class="level-pill level-avanzado">Nivel avanzado</span>';
+  }
+
+  function renderQuestion(){
+    const q = state.preguntas[state.idx];
+    progressFill.style.width = ((state.idx)/state.preguntas.length*100)+"%";
+    cardArea.dataset.locked = '0';
+
+    let optsHTML = q.opciones.map((o,i)=>`
+      <label class="opt" data-idx="${i}">
+        <input type="radio" name="opt" value="${i}">
+        <span class="letter">${String.fromCharCode(65+i)})</span>
+        <span>${o.html}</span>
+      </label>
+    `).join("");
+
+    cardArea.innerHTML = `
+      ${levelLabel(q.nivel)}
+      <div style="color:var(--ink-soft);font-size:0.8rem;margin-bottom:10px;">Pregunta ${state.idx+1} de ${state.preguntas.length}</div>
+      <p class="q-text">${q.enunciado}</p>
+      ${q.graphHTML ? `<div class="graph-wrap">${q.graphHTML}</div>` : ""}
+      <div class="options">${optsHTML}</div>
+      <div class="nav-row">
+        <button class="primary" id="confirmBtn" disabled>Confirmar respuesta</button>
+      </div>
+    `;
+
+    let selected = null;
+    cardArea.querySelectorAll('.opt').forEach(el=>{
+      el.addEventListener('click', ()=>{
+        if(cardArea.dataset.locked==='1') return;
+        cardArea.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
+        el.classList.add('selected');
+        el.querySelector('input').checked = true;
+        selected = parseInt(el.dataset.idx,10);
+        document.getElementById('confirmBtn').disabled = false;
+      });
+    });
+
+    document.getElementById('confirmBtn').addEventListener('click', ()=>{
+      if(selected===null) return;
+      cardArea.dataset.locked='1';
+      const opt = q.opciones[selected];
+      state.respuestas.push({ok:opt.ok, nivel:q.nivel});
+
+      cardArea.querySelectorAll('.opt').forEach((el)=>{
+        el.style.cursor='default';
+      });
+
+      const isLast = state.idx === state.preguntas.length-1;
+      const nav = cardArea.querySelector('.nav-row');
+      nav.innerHTML = `<button class="primary" id="nextBtn">${isLast? 'Ver resultados':'Siguiente pregunta'}</button>`;
+      document.getElementById('nextBtn').addEventListener('click', ()=>{
+        if(isLast){ finishExam(false); }
+        else { state.idx++; renderQuestion(); }
+      });
+    });
+  }
+
+  function finishExam(byTimeout){
+    if(state.finished) return;
+    state.finished = true;
+    clearInterval(state.timerInterval);
+
+    // Si se acabó el tiempo con preguntas sin responder, se marcan como incorrectas
+    while(state.respuestas.length < state.preguntas.length){
+      state.respuestas.push({ok:false, nivel: state.preguntas[state.respuestas.length].nivel});
+    }
+
+    const aciertos = state.respuestas.filter(r=>r.ok).length;
+    const total = state.preguntas.length;
+    const nota = Math.round((aciertos/total)*5*10)/10; // escala 0-5, un decimal
+    const tiempoUsado = 600 - state.timeLeft;
+    const pct = Math.round((aciertos/total)*100);
+
+    // Desglose por nivel
+    const niveles = ["basico","intermedio","avanzado"];
+    const nivelLabelTxt = {basico:"Básico", intermedio:"Intermedio", avanzado:"Avanzado"};
+    const desglose = {};
+    niveles.forEach(n=>{
+      const deEseNivel = state.respuestas.filter(r=>r.nivel===n);
+      const correctasDeEseNivel = deEseNivel.filter(r=>r.ok).length;
+      desglose[n] = {correctas:correctasDeEseNivel, total:deEseNivel.length};
+    });
+    const desgloseTxt = niveles
+      .map(n=>`${nivelLabelTxt[n]} (${desglose[n].correctas}/${desglose[n].total})`)
+      .join("; ");
+
+    progressFill.style.width = "100%";
+
+    // Resumen detallado de cada pregunta (mostrado solo al final, no durante la evaluación)
+    const detalleHTML = state.preguntas.map((q,i)=>{
+      const r = state.respuestas[i];
+      return `
+        <div class="review-item ${r.ok?'ok':'bad'}">
+          <span class="review-num">${r.ok?'✓':'✗'} Pregunta ${i+1}</span>
+          <span class="review-level">${nivelLabelTxt[q.nivel]}</span>
+        </div>`;
+    }).join("");
+
+    cardArea.innerHTML = `
+      <div class="results">
+        <h2>${byTimeout? '⏱ Tiempo agotado' : '✅ Evaluación finalizada'}</h2>
+        <p style="color:var(--ink-soft);">${state.nombre}</p>
+        <div class="score-circle" style="--pct:${pct}"><span>${nota}</span></div>
+        <div class="summary-grid">
+          <div class="summary-item"><div class="num">${aciertos}/${total}</div><div class="lbl">Aciertos</div></div>
+          <div class="summary-item"><div class="num">${nota}</div><div class="lbl">Nota (0–5)</div></div>
+          <div class="summary-item"><div class="num">${fmtTime(tiempoUsado)}</div><div class="lbl">Tiempo usado</div></div>
+        </div>
+        <div class="level-breakdown">${desgloseTxt}</div>
+        <div class="review-list">${detalleHTML}</div>
+        <div class="save-status" id="saveStatus">Guardando resultados…</div>
+      </div>
+    `;
+
+    saveResult(state.nombre, aciertos, total, nota, tiempoUsado, desgloseTxt);
+  }
+
+  function saveResult(nombre, aciertos, total, nota, tiempoUsado, desgloseTxt){
+    const body = new URLSearchParams({
+      "form-name":"grado9-sistemas-ecuaciones-rectas",
+      "estudiante": nombre,
+      "aciertos": `${aciertos}/${total}`,
+      "nota": String(nota),
+      "tiempo": fmtTime(tiempoUsado),
+      "nivel": desgloseTxt
+    });
+
+    fetch("/", {
+      method:"POST",
+      headers:{"Content-Type":"application/x-www-form-urlencoded"},
+      body: body.toString()
+    }).then(()=>{
+      const el = document.getElementById('saveStatus');
+      if(el){ el.textContent = "Resultados guardados correctamente."; el.classList.add('ok'); }
+    }).catch(()=>{
+      const el = document.getElementById('saveStatus');
+      if(el){ el.textContent = "No se pudieron guardar los resultados automáticamente. Informa a tu docente."; el.classList.add('err'); }
+    });
+  }
+
+  renderNameGate();
+})();
+</script>
+</body>
+</html>
